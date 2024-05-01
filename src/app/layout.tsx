@@ -16,7 +16,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      sfsjfj
       <body className={inter.className}>{children}</body>
     </html>
   );

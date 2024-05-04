@@ -26,6 +26,10 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+.radial {
+  background: radial-gradient(indigo, purple, pink);
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

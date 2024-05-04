@@ -1,5 +1,6 @@
 export const recipes = [
   {
+    id: 1,
     name: "Classic Spaghetti Carbonara",
     description:
       "A traditional Italian pasta dish with a creamy sauce made from eggs, cheese, and bacon.",
@@ -9,8 +10,11 @@ export const recipes = [
     activeIngredient: "Eggs, Bacon, Parmesan cheese",
     category: "Pasta",
     countryOfOrigin: "Italy",
+    calories: 550,
+    cookingTime: 20,
   },
   {
+    id: 2,
     name: "Greek Salad",
     description:
       "A refreshing salad made with fresh vegetables, feta cheese, olives, and a simple vinaigrette dressing.",
@@ -20,8 +24,11 @@ export const recipes = [
     activeIngredient: "Feta cheese, Olives",
     category: "Salad",
     countryOfOrigin: "Greece",
+    calories: 250,
+    cookingTime: 15,
   },
   {
+    id: 3,
     name: "Homemade Pizza",
     description:
       "A delicious pizza with homemade dough and your favorite toppings.",
@@ -31,8 +38,11 @@ export const recipes = [
     activeIngredient: "Pizza dough, Tomato sauce, Cheese",
     category: "Pizza",
     countryOfOrigin: "Italy",
+    calories: 300,
+    cookingTime: 25,
   },
   {
+    id: 4,
     name: "Chicken Alfredo Pasta",
     description:
       "Creamy pasta dish with grilled chicken, Alfredo sauce, and broccoli florets.",
@@ -42,8 +52,11 @@ export const recipes = [
     activeIngredient: "Chicken breast, Alfredo sauce, Broccoli",
     category: "Pasta",
     countryOfOrigin: "Italy",
+    calories: 600,
+    cookingTime: 30,
   },
   {
+    id: 5,
     name: "Vegetable Stir-Fry",
     description:
       "Healthy stir-fried vegetables with tofu, served over steamed rice.",
@@ -53,8 +66,11 @@ export const recipes = [
     activeIngredient: "Tofu, Assorted vegetables",
     category: "Vegetarian",
     countryOfOrigin: "China",
+    calories: 400,
+    cookingTime: 20,
   },
   {
+    id: 6,
     name: "Banana Bread",
     description:
       "Moist and flavorful banana bread made with ripe bananas and nuts.",
@@ -64,8 +80,11 @@ export const recipes = [
     activeIngredient: "Bananas, Nuts",
     category: "Bread",
     countryOfOrigin: "United States",
+    calories: 200,
+    cookingTime: 50,
   },
   {
+    id: 7,
     name: "Tomato Basil Bruschetta",
     description:
       "Classic Italian appetizer made with toasted bread, fresh tomatoes, basil, and garlic.",
@@ -75,8 +94,11 @@ export const recipes = [
     activeIngredient: "Tomatoes, Basil",
     category: "Appetizer",
     countryOfOrigin: "Italy",
+    calories: 150,
+    cookingTime: 10,
   },
   {
+    id: 8,
     name: "Beef Tacos",
     description:
       "Tasty tacos filled with seasoned ground beef, lettuce, cheese, and salsa.",
@@ -86,8 +108,11 @@ export const recipes = [
     activeIngredient: "Ground beef, Lettuce, Cheese",
     category: "Mexican",
     countryOfOrigin: "Mexico",
+    calories: 450,
+    cookingTime: 25,
   },
   {
+    id: 9,
     name: "Chocolate Chip Cookies",
     description:
       "Classic homemade cookies with gooey chocolate chips and a soft, chewy texture.",
@@ -97,8 +122,11 @@ export const recipes = [
     activeIngredient: "Chocolate chips",
     category: "Dessert",
     countryOfOrigin: "United States",
+    calories: 150,
+    cookingTime: 12,
   },
   {
+    id: 10,
     name: "Vegetable Soup",
     description:
       "Hearty and comforting soup made with a variety of vegetables and savory broth.",
@@ -108,8 +136,11 @@ export const recipes = [
     activeIngredient: "Assorted vegetables",
     category: "Soup",
     countryOfOrigin: "Various",
+    calories: 180,
+    cookingTime: 40,
   },
   {
+    id: 11,
     name: "Grilled Salmon with Lemon Butter Sauce",
     description:
       "Flaky grilled salmon fillets drizzled with a tangy lemon butter sauce.",
@@ -119,8 +150,11 @@ export const recipes = [
     activeIngredient: "Salmon fillets, Lemon, Butter",
     category: "Seafood",
     countryOfOrigin: "Various",
+    calories: 350,
+    cookingTime: 15,
   },
   {
+    id: 12,
     name: "Mushroom Risotto",
     description:
       "Creamy Italian rice dish made with Arborio rice, mushrooms, and Parmesan cheese.",
@@ -130,8 +164,11 @@ export const recipes = [
     activeIngredient: "Arborio rice, Mushrooms, Parmesan cheese",
     category: "Italian",
     countryOfOrigin: "Italy",
+    calories: 400,
+    cookingTime: 35,
   },
   {
+    id: 13,
     name: "Oven-Baked Chicken Parmesan",
     description:
       "Tender chicken breasts coated in breadcrumbs and Parmesan cheese, topped with marinara sauce and melted mozzarella.",
@@ -141,8 +178,11 @@ export const recipes = [
     activeIngredient: "Chicken breasts, Breadcrumbs, Mozzarella cheese",
     category: "Chicken",
     countryOfOrigin: "Italy",
+    calories: 500,
+    cookingTime: 40,
   },
   {
+    id: 14,
     name: "Spinach and Feta Stuffed Chicken",
     description:
       "Juicy chicken breasts stuffed with spinach, feta cheese, and herbs.",
@@ -152,7 +192,7 @@ export const recipes = [
     activeIngredient: "Chicken breasts, Spinach, Feta cheese",
     category: "Chicken",
     countryOfOrigin: "Various",
+    calories: 400,
+    cookingTime: 35,
   },
 ];
-
-console.log(recipes);

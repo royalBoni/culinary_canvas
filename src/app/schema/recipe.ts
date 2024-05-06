@@ -4,8 +4,8 @@ import z from "zod";
  * Movie
  */
 export const recipeSchema = z.object({
-  name: z.string(),
   id: z.number(),
+  name: z.string(),
   description: z.string(),
   benefit: z.string(),
   preparation: z.string(),
@@ -14,6 +14,7 @@ export const recipeSchema = z.object({
   countryOfOrigin: z.string(),
   calories: z.number(),
   cookingTime: z.number(),
+  chefId: z.number(),
 });
 
 export type recipeType = z.infer<typeof recipeSchema>;
@@ -29,3 +30,13 @@ export const chefSchema = z.object({
 });
 
 export type chefType = z.infer<typeof chefSchema>;
+
+export const commentSchema = z.object({
+  id: z.number(),
+  recipe_id: z.number(),
+  user_id: z.number(),
+  content: z.string(),
+  created_at: z.string(),
+});
+
+export type commentType = z.infer<typeof commentSchema>;

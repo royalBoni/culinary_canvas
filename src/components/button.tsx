@@ -7,7 +7,7 @@ type ButtonProps = DetailedHTMLProps<
 
 export const Button = ({ ...buttonProps }: ButtonProps) => (
   <button
-    className="w-fit p-4 rounded-lg bg-pink-500 text-white border-white text-lg"
+    className="w-fit p-2 rounded-lg bg-pink-500 text-white border-white text-lg hover:bg-pink-400 hover:text-gray-400"
     {...buttonProps}
   />
 );

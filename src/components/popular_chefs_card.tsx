@@ -18,7 +18,7 @@ const Popular_chef_card = ({ chef }: { chef: chefType }) => {
         />
         <div>
           <div className="text-pink-500 font-bold">{chef.username}</div>{" "}
-          <div className="text-white">{chef.bio.slice(1, 50)}</div>
+          <div className="text-white">{chef.bio.slice(0, 50)}</div>
           <div className="text-gray-500 font-bold">
             Followed by Samrawit and 2k others
           </div>

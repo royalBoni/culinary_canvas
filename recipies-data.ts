@@ -12,6 +12,7 @@ export const recipes = [
     countryOfOrigin: "Italy",
     calories: 550,
     cookingTime: 20,
+    chefId: 1,
   },
   {
     id: 2,
@@ -26,6 +27,7 @@ export const recipes = [
     countryOfOrigin: "Greece",
     calories: 250,
     cookingTime: 15,
+    chefId: 2,
   },
   {
     id: 3,
@@ -40,6 +42,7 @@ export const recipes = [
     countryOfOrigin: "Italy",
     calories: 300,
     cookingTime: 25,
+    chefId: 1,
   },
   {
     id: 4,
@@ -54,6 +57,7 @@ export const recipes = [
     countryOfOrigin: "Italy",
     calories: 600,
     cookingTime: 30,
+    chefId: 3,
   },
   {
     id: 5,
@@ -68,6 +72,7 @@ export const recipes = [
     countryOfOrigin: "China",
     calories: 400,
     cookingTime: 20,
+    chefId: 4,
   },
   {
     id: 6,
@@ -82,6 +87,7 @@ export const recipes = [
     countryOfOrigin: "United States",
     calories: 200,
     cookingTime: 50,
+    chefId: 5,
   },
   {
     id: 7,
@@ -96,6 +102,7 @@ export const recipes = [
     countryOfOrigin: "Italy",
     calories: 150,
     cookingTime: 10,
+    chefId: 1,
   },
   {
     id: 8,
@@ -110,6 +117,7 @@ export const recipes = [
     countryOfOrigin: "Mexico",
     calories: 450,
     cookingTime: 25,
+    chefId: 2,
   },
   {
     id: 9,
@@ -124,6 +132,7 @@ export const recipes = [
     countryOfOrigin: "United States",
     calories: 150,
     cookingTime: 12,
+    chefId: 3,
   },
   {
     id: 10,
@@ -138,6 +147,7 @@ export const recipes = [
     countryOfOrigin: "Various",
     calories: 180,
     cookingTime: 40,
+    chefId: 4,
   },
   {
     id: 11,
@@ -152,6 +162,7 @@ export const recipes = [
     countryOfOrigin: "Various",
     calories: 350,
     cookingTime: 15,
+    chefId: 5,
   },
   {
     id: 12,
@@ -166,6 +177,7 @@ export const recipes = [
     countryOfOrigin: "Italy",
     calories: 400,
     cookingTime: 35,
+    chefId: 1,
   },
   {
     id: 13,
@@ -180,6 +192,7 @@ export const recipes = [
     countryOfOrigin: "Italy",
     calories: 500,
     cookingTime: 40,
+    chefId: 2,
   },
   {
     id: 14,
@@ -194,5 +207,6 @@ export const recipes = [
     countryOfOrigin: "Various",
     calories: 400,
     cookingTime: 35,
+    chefId: 3,
   },
 ];

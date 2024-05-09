@@ -65,6 +65,14 @@ body {
   border-radius: 10px;
 }
 
+.backgroungImage {
+  height: 30%;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

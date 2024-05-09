@@ -15,8 +15,6 @@ const Recipy_card = async ({ recipe }: { recipe: recipeType }) => {
   return (
     <div className="flex flex-col gap-2">
       <div className="p-5 rounded-lg text-white bg-black flex flex-col gap-3 border-4 border-transparent hover:border-pink-400">
-        {/* border-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 m-auto */}
-        {/* {JSON.stringify(recipe)} */}
         <div className="flex justify-center items-center">
           <Image
             src={
@@ -61,11 +59,9 @@ const Recipy_card = async ({ recipe }: { recipe: recipeType }) => {
           </div>
         </div>
       </div>
-      {/* <button className="w-fit p-4 rounded-lg bg-pink-500 text-white border-white text-lg">
-    View Details
-  </button> */}
+
       <Button>
-        <Link href={`/recipies/${recipe.id}}`}>Explore Me</Link>
+        <Link href={`/recipies/${recipe.id}`}>Explore Me</Link>
       </Button>
     </div>
   );

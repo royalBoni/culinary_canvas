@@ -2,10 +2,9 @@
 import React from "react";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 
-import { CaretDownIcon } from "@radix-ui/react-icons";
 import "./recipiesNav.css";
 
-const recipyHeaderItems = [
+export const recipyHeaderItems = [
   { name: "ALL", items: [] },
   {
     name: "CATEGORIES",

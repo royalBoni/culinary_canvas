@@ -20,8 +20,11 @@ h3 {
   height: 100vh;
   padding: 25px;
   animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
-  background-color: rgba(128, 128, 128, 0.329);
+  background-color: rgba(47, 45, 45, 0.696);
   z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .AlertDialogContent:focus {
   outline: none;

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import styles from "./navLink.module.css";
 import { linkType } from "../Links";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -13,8 +12,8 @@ const NavLink = ({ item }: { item: linkType }) => {
     <Link
       href={item.path}
       key={item.title}
-      className={`${styles.container} ${
-        pathName === item.path && styles.active
+      className={`p-5 rounded-full hover:bg-pink-500 text-white ${
+        pathName === item.path && "bg-pink-500 text-white"
       }`}
     >
       {item.title}

@@ -10,10 +10,9 @@ import * as Accordion from "@radix-ui/react-accordion";
 import { AccordionTrigger, AccordionContent } from "@radix-ui/react-accordion";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import CommentCard from "./commentCard";
+import FormComponent from "./forms/authenticationForm";
 import Popular_chef_card from "./popular_chefs_card";
-/* import { FormTextField } from "@/components/form-fields";
-import { useForm, FormProvider, SubmitHandler } from "react-hook-form"; */
-import "../app/recipies/[slug]/styles.css";
+import "../app/(chefsAndRecipies)/recipies/[slug]/styles.css";
 
 const wait = () => new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -43,7 +42,7 @@ const SingleRecipeChild = ({
   }); */
 
   return (
-    <div className="radial h-screen p-14 relative">
+    <div className="h-screen relative ">
       <div>
         <Link href={"/recipies"}>View more from chef</Link>
       </div>
@@ -110,16 +109,17 @@ const SingleRecipeChild = ({
             <AlertDialog.Portal>
               <AlertDialog.Overlay />
               <AlertDialog.Content className="AlertDialogContent">
-                <form
+                {/*  <form
                   onSubmit={(event) => {
                     wait().then(() => setOpenCommetForm(false));
                     event.preventDefault();
                   }}
                 >
-                  {/** some inputs */}
+                  
                   <input type="text" placeholder="enter your name" />
                   <button type="submit">Submit</button>
-                </form>
+                </form> */}
+                <FormComponent />
               </AlertDialog.Content>
             </AlertDialog.Portal>
           </AlertDialog.Root>

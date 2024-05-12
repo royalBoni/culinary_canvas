@@ -22,11 +22,12 @@ export const FormTextField = ({
   } = useFormContext();
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 w-full">
       <label htmlFor={name}>{label}</label>
 
       <TextInput {...inputProps} {...register(name)} />
-      {errors.root?.message && <p>{errors.root.message}</p>}
+      {/* {errors[name] && typeof errors[name] === 'string' && (
+        <p>{errors[name]}</p> */}
     </div>
   );
 };

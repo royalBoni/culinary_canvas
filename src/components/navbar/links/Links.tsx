@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import styles from "./links.module.css";
 import NavLink from "./navLink/navLink";
 import Image from "next/image";
+import { Button } from "@/components/button";
 
 export type linkType = {
   title: string;
@@ -11,30 +12,29 @@ export type linkType = {
 };
 
 const links: linkType[] = [
-  { title: "Homepage", path: "/" },
-  { title: "About", path: "/about" },
-  { title: "Contact", path: "/contact" },
+  { title: "Recipies", path: "/recipies" },
+  { title: "Chefs", path: "/chefs" },
   { title: "Blog", path: "/blog" },
+  { title: "FAQ", path: "/" },
 ];
 
 const Links = () => {
   const [open, setOpen] = useState(false);
 
-  const session = false;
-  const isAdmin = false;
+  const sessionLoggedIn = false;
   return (
     <div className={styles.container}>
       <div className={styles.links}>
         {links.map((link: linkType) => (
           <NavLink item={link} key={link.title} />
         ))}
-        {!session ? (
+        {!sessionLoggedIn ? (
           <NavLink item={{ title: "login", path: "/login" }} />
         ) : (
           <>
-            {isAdmin && <NavLink item={{ title: "Admin", path: "/admin" }} />}
+            {<NavLink item={{ title: "Profile", path: "/profile" }} />}
 
-            <button className={styles.logout}>logout</button>
+            <Button>logout</Button>
           </>
         )}
       </div>

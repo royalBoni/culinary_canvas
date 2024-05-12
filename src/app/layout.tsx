@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import Image from "next/image";
 import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
+import { DataProvider } from "./store/data-context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,21 +19,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        {/*  <nav className="bg-black p-5 z-10 w-full">
-          <div>
-            <Image
-              src={"/logo.jpg"}
-              alt="logo image"
-              width={40}
-              height={40}
-              className="w-16 h-16 rounded-full"
-            />
-          </div>
-        </nav> */}
-        <Navbar />
-        {children}
-      </body>
+      <DataProvider>
+        <body className={inter.className}>
+          <Navbar />
+          {children}
+        </body>
+      </DataProvider>
     </html>
   );
 }

@@ -1,8 +1,8 @@
 import React from "react";
 import { Search } from "lucide-react";
-import NavigationMenuDemo from "@/components/recipiesNav";
+import NavigationMenuDemo from "@/components/RecipesNav";
 
-const ChefsRecipiesFilterNav = () => {
+const ChefRecipesFilterNav = () => {
   return (
     <div className="hidden md:flex justify-between w-4/4">
       <NavigationMenuDemo />
@@ -18,4 +18,4 @@ const ChefsRecipiesFilterNav = () => {
   );
 };
 
-export default ChefsRecipiesFilterNav;
+export default ChefRecipesFilterNav;

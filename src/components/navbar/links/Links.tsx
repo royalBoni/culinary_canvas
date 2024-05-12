@@ -2,9 +2,9 @@
 
 import React, { useState } from "react";
 import styles from "./links.module.css";
-import NavLink from "./navLink/navLink";
+import NavLink from "@/components/navbar/links/NavLink/NavLink";
 import Image from "next/image";
-import { Button } from "@/components/button";
+import { Button } from "@/components/Button";
 
 export type linkType = {
   title: string;

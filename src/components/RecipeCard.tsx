@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { Heart, MessageCircleMore } from "lucide-react";
 import { chefType, recipeType } from "@/app/schema/recipe";
-import { Button } from "./button";
+import { Button } from "./Button";
 import Link from "next/link";
 import { getChef } from "@/lib/actions";
 
@@ -11,7 +11,7 @@ export const returnChef = async (id: number) => {
   return chef as chefType;
 };
 
-const Recipy_card = async ({ recipe }: { recipe: recipeType }) => {
+const RecipeCard = async ({ recipe }: { recipe: recipeType }) => {
   return (
     <div className="flex flex-col gap-2">
       <div className="p-5 rounded-lg text-white bg-black flex flex-col gap-3 border-4 border-transparent hover:border-pink-400">
@@ -67,4 +67,4 @@ const Recipy_card = async ({ recipe }: { recipe: recipeType }) => {
   );
 };
 
-export default Recipy_card;
+export default RecipeCard;

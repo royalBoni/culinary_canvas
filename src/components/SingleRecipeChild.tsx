@@ -10,7 +10,7 @@ import * as Accordion from "@radix-ui/react-accordion";
 import { AccordionTrigger, AccordionContent } from "@radix-ui/react-accordion";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import CommentCard from "./commentCard";
-import FormComponent from "./forms/authenticationForm";
+import FormComponent from "./forms/AuthenticationForm";
 import PopularChefCard from "./PopularChefCard";
 import "../app/(chefsAndRecipies)/recipies/[slug]/styles.css";
 

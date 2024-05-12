@@ -9,7 +9,7 @@ import {
 } from "react-hook-form";
 
 import { useRouter } from "next/navigation";
-import { Button } from "../button";
+import { Button } from "../Button";
 import { Check, ArrowRight } from "lucide-react";
 
 /* import { useMutation } from '@tanstack/react-query';

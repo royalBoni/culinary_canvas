@@ -11,7 +11,7 @@ const PopularChefCard = ({ chef }: { chef: chefType }) => {
     router.push(`/chefs/${id}`);
   };
   return (
-    <div key={chef.id} className="flex flex-col gap-2 bg-black rounded-xl">
+    <div key={chef.id} className="flex flex-col gap-2 bg-black rounded-xl p-2.5">
       <div className="flex gap-5">
         {" "}
         <Image

@@ -10,8 +10,8 @@ import * as Accordion from "@radix-ui/react-accordion";
 import { AccordionTrigger, AccordionContent } from "@radix-ui/react-accordion";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import CommentCard from "./commentCard";
-import FormComponent from "./forms/authenticationForm";
-import Popular_chef_card from "./popular_chefs_card";
+import FormComponent from "./forms/AuthenticationForm";
+import PopularChefCard from "./PopularChefCard";
 import "../app/(chefsAndRecipies)/recipies/[slug]/styles.css";
 
 const wait = () => new Promise((resolve) => setTimeout(resolve, 1000));
@@ -158,7 +158,7 @@ const SingleRecipeChild = ({
           </Accordion.Root>
           <div className="flex flex-col gap-3">
             <div className="text-pink-500 font-bold">Authored by:</div>{" "}
-            <Popular_chef_card chef={chef} />
+            <PopularChefCard chef={chef} />
           </div>
           <div className="flex flex-col gap-4">
             <h1 className="text-pink-500 font-bold">COMMENTS:</h1>

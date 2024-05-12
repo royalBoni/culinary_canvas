@@ -1,6 +1,6 @@
 import Link from "next/link";
 import "./styles.css";
-import { Button } from "@/components/button";
+import { Button } from "@/components/Button";
 
 export default function Home() {
   return (

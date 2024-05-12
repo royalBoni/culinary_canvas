@@ -2,7 +2,7 @@
 import React from "react";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 
-import "./recipiesNav.css";
+import "./RecipesNav.css";
 
 export const recipyHeaderItems = [
   { name: "ALL", items: [] },

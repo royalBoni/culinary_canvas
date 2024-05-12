@@ -4,14 +4,14 @@ import Image from "next/image";
 import { chefType } from "@/app/schema/recipe";
 import { useRouter } from "next/navigation";
 
-const Popular_chef_card = ({ chef }: { chef: chefType }) => {
+const PopularChefCard = ({ chef }: { chef: chefType }) => {
   const router = useRouter();
 
   const visitChefPage = (id: number) => {
     router.push(`/chefs/${id}`);
   };
   return (
-    <div key={chef.id} className="flex flex-col gap-2 bg-black rounded-xl">
+    <div key={chef.id} className="flex flex-col gap-2 bg-black rounded-xl p-2.5">
       <div className="flex gap-5">
         {" "}
         <Image
@@ -33,4 +33,4 @@ const Popular_chef_card = ({ chef }: { chef: chefType }) => {
   );
 };
 
-export default Popular_chef_card;
+export default PopularChefCard;

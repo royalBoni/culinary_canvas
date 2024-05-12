@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { chefType, recipeType } from "@/app/schema/recipe";
-import { Button } from "./button";
-import Recipy_card from "./recipy_card";
+import { Button } from "./Button";
+import RecipeCard from "./RecipeCard";
 
 type RecipiesAndCategoryType = {
   categories: string[];
@@ -92,7 +92,7 @@ const ChefChildPage = ({
       </div>
       <div className="grid-cols-3 grid gap-5 mt-10">
         {recipiesAndCategory.recipes.map((recipe) => (
-          <Recipy_card recipe={recipe} />
+          <RecipeCard recipe={recipe} />
         ))}
       </div>
     </div>

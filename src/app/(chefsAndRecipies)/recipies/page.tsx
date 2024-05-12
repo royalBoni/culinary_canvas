@@ -2,7 +2,7 @@
 import React from "react";
 import { getAllChefs, getRecipies } from "@/lib/actions";
 import { recipeType, chefType } from "@/app/schema/recipe";
-import Recipy_card from "@/components/recipy_card";
+import RecipeCard from "@/components/RecipeCard";
 import { useDataContext } from "@/app/store/data-context";
 
 const Recipies = () => {
@@ -20,9 +20,9 @@ const Recipies = () => {
         explore
       </p>
 
-      <div className="grid-cols-3 grid gap-5">
+      <div className="grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid gap-5">
         {recipies.map((recipe) => (
-          <Recipy_card recipe={recipe} key={recipe.id} />
+          <RecipeCard recipe={recipe} key={recipe.id} />
         ))}
       </div>
     </section>

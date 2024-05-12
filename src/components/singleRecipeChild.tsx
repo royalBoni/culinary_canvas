@@ -94,7 +94,7 @@ const SingleRecipeChild = ({
               mins
             </div>
           </div>
-          /* SOCIALS
+          {/* SOCIALS */}
           <div className="flex gap-5">
             <div className="text-red-500 flex gap-2">
               <Heart /> 12

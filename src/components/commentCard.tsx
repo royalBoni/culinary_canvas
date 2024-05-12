@@ -19,7 +19,7 @@ const CommentCard = ({ comment }: { comment: commentType }) => {
   // Use useEffect to fetch data when the component mounts
   useEffect(() => {
     fetchPoster();
-  }, [poster]);
+  });
   return (
     <div className="bg-pink-500 rounded-lg flex flex-col gap-3 p-4 text-white">
       <div className="flex justify-between">

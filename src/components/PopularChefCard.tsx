@@ -4,7 +4,7 @@ import Image from "next/image";
 import { chefType } from "@/app/schema/recipe";
 import { useRouter } from "next/navigation";
 
-const Popular_chef_card = ({ chef }: { chef: chefType }) => {
+const PopularChefCard = ({ chef }: { chef: chefType }) => {
   const router = useRouter();
 
   const visitChefPage = (id: number) => {
@@ -33,4 +33,4 @@ const Popular_chef_card = ({ chef }: { chef: chefType }) => {
   );
 };
 
-export default Popular_chef_card;
+export default PopularChefCard;

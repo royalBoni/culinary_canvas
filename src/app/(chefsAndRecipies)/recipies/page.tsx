@@ -20,7 +20,7 @@ const Recipies = () => {
         explore
       </p>
 
-      <div className="grid-cols-3 grid gap-5">
+      <div className="grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid gap-5">
         {recipies.map((recipe) => (
           <Recipy_card recipe={recipe} key={recipe.id} />
         ))}

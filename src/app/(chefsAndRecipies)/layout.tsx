@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { type PropsWithChildren } from "react";
 
-import ChefRecipiesSideBar from "@/components/chefsRecipiesSideBar";
+import ChefRecipesSidebar from "@/components/ChefRecipesSidebar";
 import ChefsRecipiesFilterNav from "@/components/navbar/chefsRecipiesFilterNav";
 
 export const metadata: Metadata = {
@@ -17,11 +17,11 @@ const Layout = async ({ children }: PropsWithChildren) => {
   return (
     <>
       {" "}
-      <div className="flex flex-col gap-10 radial min-h-screen p-14 ">
+      <div className="flex flex-col gap-10 radial min-h-screen py-2.5 md:p-14 ">
         <ChefsRecipiesFilterNav />
-        <div className="flex gap-20">
+        <div className="flex gap-20 justify-center">
           {children}
-          <ChefRecipiesSideBar />
+          <ChefRecipesSidebar />
         </div>
       </div>
     </>

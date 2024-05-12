@@ -2,7 +2,7 @@ import React from "react";
 import { getChef, getRecipe } from "@/lib/actions";
 import { recipeType, chefType, commentType } from "@/app/schema/recipe";
 import { getProductComments } from "@/lib/actions";
-import SingleRecipeChild from "@/components/singleRecipeChild";
+import SingleRecipeChild from "@/components/SingleRecipeChild";
 import "./styles.css";
 
 type SlugType = {

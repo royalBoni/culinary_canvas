@@ -4,7 +4,7 @@ import { AlarmClock, Flame, Heart, MessageCircleMore } from "lucide-react";
 import { recipeType } from "@/app/schema/recipe";
 import Link from "next/link";
 
-const Popular_recipe_card = ({ recipe }: { recipe: recipeType }) => {
+const PopularRecipeCard = ({ recipe }: { recipe: recipeType }) => {
   return (
     <div
       key={recipe.id}
@@ -50,4 +50,4 @@ const Popular_recipe_card = ({ recipe }: { recipe: recipeType }) => {
   );
 };
 
-export default Popular_recipe_card;
+export default PopularRecipeCard;

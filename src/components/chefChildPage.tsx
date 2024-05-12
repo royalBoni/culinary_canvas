@@ -91,8 +91,8 @@ const ChefChildPage = ({
         </div>
       </div>
       <div className="grid-cols-3 grid gap-5 mt-10">
-        {recipiesAndCategory.recipes.map((recipe) => (
-          <Recipy_card recipe={recipe} />
+        {recipiesAndCategory.recipes.map((recipe, index) => (
+          <Recipy_card recipe={recipe} key={index} />
         ))}
       </div>
     </div>

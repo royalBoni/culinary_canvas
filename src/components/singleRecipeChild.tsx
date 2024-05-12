@@ -32,7 +32,8 @@ const SingleRecipeChild = ({
     setImageUrl(url);
   }, []);
 
-  /*  const methods = useForm({
+  {
+    /*  const methods = useForm({
     defaultValues: {
       name: "name",
       type: "comedy",
@@ -40,6 +41,7 @@ const SingleRecipeChild = ({
 
     //resolver: zodResolver(movieFormSchema)
   }); */
+  }
 
   return (
     <div className="h-screen relative ">

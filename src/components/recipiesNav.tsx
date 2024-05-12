@@ -29,15 +29,15 @@ const NavigationMenuDemo = () => {
   return (
     <NavigationMenu.Root>
       <NavigationMenu.List className="flex gap-5 bg-black rounded-full p-3 text-white">
-        {recipyHeaderItems.map((recipyHeaderItem) => (
-          <NavigationMenu.Item>
+        {recipyHeaderItems.map((recipyHeaderItem, index) => (
+          <NavigationMenu.Item key={index}>
             <NavigationMenu.Trigger className="p-2 font-bold">
               {recipyHeaderItem.name}
             </NavigationMenu.Trigger>
             {recipyHeaderItem.items.length > 1 && (
               <NavigationMenu.Content className="NavigationMenuContent bg-black flex gap-5 p-5 rounded-lg">
-                {recipyHeaderItem.items.map((item) => (
-                  <ListItem title={item}></ListItem>
+                {recipyHeaderItem.items.map((item, index) => (
+                  <ListItem title={item} key={index}></ListItem>
                 ))}
               </NavigationMenu.Content>
             )}
@@ -77,5 +77,7 @@ const ListItem = React.forwardRef(
     </li>
   )
 );
+
+ListItem.displayName = "ListItem";
 
 export default NavigationMenuDemo;

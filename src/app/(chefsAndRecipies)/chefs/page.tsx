@@ -9,7 +9,7 @@ const ChefsPage = () => {
   return (
     <section className="flex flex-col gap-10 w-3/4 text-white font-bold">
       <p>
-        You have <span className="text-black">{recipies.length}</span> to
+        You have <span className="text-black">{chefs.length}</span> to
         explore
       </p>
 

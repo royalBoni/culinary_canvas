@@ -1,11 +1,9 @@
-import { db } from "@/db";
-import { users } from "@/db/schema/user";
+import { readUsers } from "@/server/user";
 
 export const dynamic = "force-dynamic";
 export const GET = async () => {
   try {
-    const allUsers = await db.select().from(users);
-    console.log(allUsers);
+    const allUsers = await readUsers();
     return Response.json(allUsers);
   } catch (error) {
     console.log(error);

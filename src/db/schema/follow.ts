@@ -14,10 +14,12 @@ export const follows = sqliteTable("follows", {
 
 export const followRelations = relations(follows, ({ one }) => ({
   follower: one(users, {
+    relationName: "follower",
     fields: [follows.follower_id],
     references: [users.id],
   }),
   following: one(users, {
+    relationName: "following",
     fields: [follows.following_id],
     references: [users.id],
   }),

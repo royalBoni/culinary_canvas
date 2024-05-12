@@ -21,6 +21,6 @@ export const userRelations = relations(users, ({ many }) => ({
   recipes: many(recipes),
   comments: many(comments),
   likes: many(likes),
-  followsAsFollower: many(follows),
-  followsAsFollowing: many(follows),
+  followsAsFollower: many(follows, { relationName: "follower" }),
+  followsAsFollowing: many(follows, { relationName: "following" }),
 }));

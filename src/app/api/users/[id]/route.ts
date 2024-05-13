@@ -1,10 +1,9 @@
 import { addFollow, getUser, removeFollow } from "@/server/user";
-import { NextApiRequest, NextApiResponse } from "next";
 
 export const dynamic = "force-dynamic";
 
 export const GET = async (
-  req: NextApiRequest,
+  req: Request,
   { params }: { params: { id: number } }
 ) => {
   try {

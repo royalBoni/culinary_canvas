@@ -9,7 +9,7 @@ import {
 } from "react-hook-form";
 import { loginUser } from "@/lib/actions";
 import { useRouter } from "next/navigation";
-import { Button } from "../Button";
+import { Button } from "../button";
 import { Check, ArrowRight } from "lucide-react";
 import { UseUserContext } from "@/app/store/userContext";
 import { useAlertDialogContext } from "@/app/store/alertDialogContext";
@@ -127,7 +127,7 @@ const FormComponent =
             </p>
           ) : (
             <p>
-              You don't have an account?{" "}
+              You don't have an account?
               <span
                 className="text-gray-500 hover:text-white"
                 onClick={() => setFormOperationState("sign-up")}

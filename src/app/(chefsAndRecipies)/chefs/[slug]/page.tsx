@@ -2,7 +2,7 @@
 import React from "react";
 import { getChef } from "@/lib/actions";
 import { getChefPostedCategories } from "@/lib/actions";
-import ChefChildPage from "@/components/chefChildPage";
+import ChefChildPage from "@/components/ChefChildPage";
 
 type SlugType = {
   slug: number;

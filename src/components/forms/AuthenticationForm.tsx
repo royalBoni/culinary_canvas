@@ -9,7 +9,7 @@ import {
 } from "react-hook-form";
 import { loginUser } from "@/lib/actions";
 import { useRouter } from "next/navigation";
-import { Button } from "../button";
+import { Button } from "../Button";
 import { Check, ArrowRight } from "lucide-react";
 import { UseUserContext } from "@/app/store/userContext";
 import { useAlertDialogContext } from "@/app/store/alertDialogContext";

@@ -5,7 +5,7 @@ import { getProductComments } from "@/lib/actions";
 import SingleRecipeChild from "@/components/singleRecipeChild";
 import "./styles.css";
 
-type SlugType = {
+export type SlugType = {
   slug: number;
 };
 

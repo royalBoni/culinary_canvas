@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { returnChef } from "./recipy_card";
+import { returnChef } from "./RecipeCard";
 import { commentType, chefType } from "@/app/schema/recipe";
 import { format } from "date-fns";
 import Image from "next/image";

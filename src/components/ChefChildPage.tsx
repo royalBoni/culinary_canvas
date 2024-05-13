@@ -2,11 +2,16 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { chefType, recipeType } from "@/app/schema/recipe";
+<<<<<<< HEAD:src/components/chefChildPage.tsx
 import { Button } from "./button";
 import Recipy_card from "./recipy_card";
 import { UseUserContext } from "@/app/store/userContext";
 import { UserCog } from "lucide-react";
 import { SlugType } from "@/app/(chefsAndRecipies)/recipies/[slug]/page";
+=======
+import { Button } from "./Button";
+import RecipeCard from "./RecipeCard";
+>>>>>>> 2e1cfca776e0909e9a194407b603b3bb18932a23:src/components/ChefChildPage.tsx
 
 type RecipiesAndCategoryType = {
   categories: string[];
@@ -104,7 +109,7 @@ const ChefChildPage = ({
       </div>
       <div className="grid-cols-3 grid gap-5 mt-10">
         {recipiesAndCategory.recipes.map((recipe) => (
-          <Recipy_card recipe={recipe} />
+          <RecipeCard recipe={recipe} />
         ))}
       </div>
     </div>

@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 
 export const readUsers = async () => {
   try {
-    revalidatePath("/api/users"); // Refresh cache
+    revalidatePath("/api/users/list"); // Refresh cache
     const data = await db.select().from(users);
     console.log("Data fetched:", data);
     return data || [];

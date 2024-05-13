@@ -19,9 +19,6 @@ export const recipes = sqliteTable("recipes", {
     .references(() => users.id)
     .notNull(),
   image_url: text("image_url"),
-  ingredients: text("ingredients").notNull(),
-  instructions: text("instructions").notNull(),
-  prep_time: integer("prep_time").notNull(),
 });
 
 export const recipeRelations = relations(recipes, ({ one, many }) => ({

@@ -1,5 +1,4 @@
 import { readUsers } from "@/server/user";
-
 export const dynamic = "force-dynamic";
 export const GET = async () => {
   try {

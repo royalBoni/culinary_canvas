@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import {
   useForm,
@@ -7,10 +7,12 @@ import {
   SubmitHandler,
   FieldValues,
 } from "react-hook-form";
-
+import { loginUser } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { Button } from "../button";
 import { Check, ArrowRight } from "lucide-react";
+import { UseUserContext } from "@/app/store/userContext";
+import { useAlertDialogContext } from "@/app/store/alertDialogContext";
 
 /* import { useMutation } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod'; */
@@ -32,9 +34,22 @@ export type defaultValueType = {
 	defaultVal?: defaultValueType;
 } */
 
+export type CheftLoginOrSignUpType = {
+  name?: string;
+  email: string;
+  password: string;
+  consfirmPassword?: string;
+};
+
 const FormComponent =
   (/* { movieTypes, defaultVal }: FormComponentProps */) => {
     const methods = useForm({});
+
+    const { loggedInUser } = UseUserContext();
+    const { openOrCloseAlertDialog } = useAlertDialogContext();
+
+    const [formOperationState, setFormOperationState] =
+      useState<string>("sign-up");
 
     /* const { mutate, isPending, isSuccess } = useMutation({
 		mutationFn: (newPost: MovieFormSchema) =>
@@ -45,9 +60,16 @@ const FormComponent =
 			}).then(res => res.json)
 	}); */
 
-    const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    const onSubmit = (data: CheftLoginOrSignUpType) => {
       /* mutate(data); */
-      console.log(data);
+      if (formOperationState === "sign-up") {
+        console.log(`you are signing up with ${JSON.stringify(data)}`);
+      } else {
+        const user = loginUser(data);
+        loggedInUser(user);
+        openOrCloseAlertDialog(false);
+        console.log(`you are signing in with ${JSON.stringify(user)}`);
+      }
     };
     /*
 
@@ -86,12 +108,35 @@ const FormComponent =
           </div> */}
         </div>
 
-        <div className="bg-black w-1/2 h-full text-pink-500 flex flex-col gap-2 p-14 rounded-r-2xl">
-          <h1 className="text-5xl font-bold">Create a new account</h1>
-          <p>
-            Already have an account?{" "}
-            <span className="text-gray-500 hover:text-white">Sign in</span>
-          </p>
+        <div className="bg-black w-1/2 h-full text-pink-500 flex flex-col gap-2 p-14 rounded-r-2xl overflow-y-scroll">
+          <h1 className="text-5xl font-bold">
+            {formOperationState === "sign-up"
+              ? "Create a new account"
+              : "Login in with details"}
+          </h1>
+
+          {formOperationState === "sign-up" ? (
+            <p>
+              Already have an account?{" "}
+              <span
+                className="text-gray-500 hover:text-white"
+                onClick={() => setFormOperationState("sign-in")}
+              >
+                Sign in
+              </span>
+            </p>
+          ) : (
+            <p>
+              You don't have an account?{" "}
+              <span
+                className="text-gray-500 hover:text-white"
+                onClick={() => setFormOperationState("sign-up")}
+              >
+                Sign up
+              </span>
+            </p>
+          )}
+
           <div className="flex gap-5">
             <Button className="hover:bg-gray-600 cursor-pointer bg-gray-500 p-3 text-white items-center rounded-xl flex gap-3">
               {" "}
@@ -142,26 +187,46 @@ const FormComponent =
               onSubmit={methods.handleSubmit(onSubmit)}
             >
               <div className="flex flex-col gap-5">
-                <FormTextField
-                  name="name"
-                  label="Full name"
-                  placeholder="Full name"
-                />{" "}
+                {formOperationState === "sign-up" && (
+                  <FormTextField
+                    name="name"
+                    label="Full name"
+                    placeholder="Full name"
+                    type="text"
+                    /*   validateFn={(value) => {
+                      if (value.length < 4) {
+                        return "Username should contain atleast 5 character(s)";
+                      }
+                      return;
+                    }} */
+                  />
+                )}
                 <FormTextField
                   name="email"
                   label="Email"
                   placeholder="Full name"
+                  type="email"
+                  /*  validateFn={(value) => {
+                    if (!value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                      return "Please provide a valid email eg:boni@gmail.com";
+                    }
+                    return;
+                  }} */
                 />{" "}
                 <FormTextField
                   name="password"
                   label="Password"
                   placeholder="Password"
+                  type="password"
                 />{" "}
-                <FormTextField
-                  name="confirm password"
-                  label="Confirm Password"
-                  placeholder="Confirm password"
-                />{" "}
+                {formOperationState === "sign-up" && (
+                  <FormTextField
+                    name="confirm password"
+                    label="Confirm Password"
+                    placeholder="Confirm password"
+                    type="password"
+                  />
+                )}
                 {/* {methods.formState.errors.name && (
 								<p className="text-red-600">
 									{methods.formState.errors.}
@@ -191,8 +256,13 @@ const FormComponent =
                 {isPending ? 'Submitting' : 'Submit'}
               </button> */}
               <div className="flex justify-between">
-                <Button>Sign up</Button>{" "}
-                <div className="flex gap-3 items-center cursor-pointer hover:text-gray-500">
+                <Button>
+                  {formOperationState === "sign-up" ? "Sign up" : "Sign in"}
+                </Button>{" "}
+                <div
+                  className="flex gap-3 items-center cursor-pointer hover:text-gray-500"
+                  onClick={() => openOrCloseAlertDialog(false)}
+                >
                   Continue as Guest <ArrowRight />
                 </div>
               </div>

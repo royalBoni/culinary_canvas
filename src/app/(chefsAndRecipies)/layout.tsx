@@ -10,10 +10,7 @@ export const metadata: Metadata = {
   description: "Your Home For The Best Recipes",
 };
 
-const Layout = async ({ children }: PropsWithChildren) => {
-  /*  const recipies: recipeType[] = await getRecipies();
-  const chefs: chefType[] = await getAllChefs(); */
-
+const Layout = ({ children }: PropsWithChildren) => {
   return (
     <>
       {" "}

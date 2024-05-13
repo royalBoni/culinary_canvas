@@ -10,8 +10,10 @@ import * as Accordion from "@radix-ui/react-accordion";
 import { AccordionTrigger, AccordionContent } from "@radix-ui/react-accordion";
 import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import CommentCard from "./commentCard";
-import FormComponent from "./forms/authenticationForm";
+import FormComponent from "./forms/AuthenticationForm";
 import Popular_chef_card from "./popular_chefs_card";
+import { useAlertDialogContext } from "@/app/store/alertDialogContext";
+import { UseUserContext } from "@/app/store/userContext";
 import "../app/(chefsAndRecipies)/recipies/[slug]/styles.css";
 
 const wait = () => new Promise((resolve) => setTimeout(resolve, 1000));
@@ -26,20 +28,13 @@ const SingleRecipeChild = ({
   chef: chefType;
 }) => {
   const [imageUrl, setImageUrl] = useState<string>(recipeImage[0]);
-  const [openCommentForm, setOpenCommetForm] = useState(false);
 
   const returnClickedImage = useCallback((url: string) => {
     setImageUrl(url);
   }, []);
 
-  /*  const methods = useForm({
-    defaultValues: {
-      name: "name",
-      type: "comedy",
-    },
-
-    //resolver: zodResolver(movieFormSchema)
-  }); */
+  const { alertDialog, openOrCloseAlertDialog } = useAlertDialogContext();
+  const { user } = UseUserContext();
 
   return (
     <div className="h-screen relative ">
@@ -92,37 +87,16 @@ const SingleRecipeChild = ({
               mins
             </div>
           </div>
-          /* SOCIALS
+          {/*  SOCIALS */}
           <div className="flex gap-5">
-            <div className="text-red-500 flex gap-2">
-              <Heart /> 12
+            <div className="text-red-500 flex gap-2 hover:text-gray-500 hover:cursor-pointer">
+              <Heart onClick={() => !user && openOrCloseAlertDialog(true)} /> 12
             </div>
-            <div className="text-indigo-500 flex gap-2">
-              <MessageCircleMore onClick={() => setOpenCommetForm(true)} /> 22
+            <div className="text-indigo-500 flex gap-2 hover:text-gray-500 hover:cursor-pointer">
+              <MessageCircleMore onClick={() => openOrCloseAlertDialog(true)} />{" "}
+              22
             </div>
           </div>
-          <AlertDialog.Root
-            open={openCommentForm}
-            onOpenChange={setOpenCommetForm}
-          >
-            <AlertDialog.Trigger>Open</AlertDialog.Trigger>
-            <AlertDialog.Portal>
-              <AlertDialog.Overlay />
-              <AlertDialog.Content className="AlertDialogContent">
-                {/*  <form
-                  onSubmit={(event) => {
-                    wait().then(() => setOpenCommetForm(false));
-                    event.preventDefault();
-                  }}
-                >
-                  
-                  <input type="text" placeholder="enter your name" />
-                  <button type="submit">Submit</button>
-                </form> */}
-                <FormComponent />
-              </AlertDialog.Content>
-            </AlertDialog.Portal>
-          </AlertDialog.Root>
           <Accordion.Root
             className="AccordionRoot"
             type="single"

@@ -11,7 +11,10 @@ const Popular_chef_card = ({ chef }: { chef: chefType }) => {
     router.push(`/chefs/${id}`);
   };
   return (
-    <div key={chef.id} className="flex flex-col gap-2 bg-black rounded-xl">
+    <div
+      key={chef.id}
+      className="flex flex-col gap-2 bg-black rounded-xl hover:cursor-pointer"
+    >
       <div className="flex gap-5">
         {" "}
         <Image

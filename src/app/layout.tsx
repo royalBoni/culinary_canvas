@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Image from "next/image";
 import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
 import { DataProvider } from "./store/data-context";
+import { UserProvider } from "./store/userContext";
+import { AlertDialogProvider } from "./store/alertDialogContext";
+import AlertDialogComponent from "@/components/alertDialog";
+import { Providers } from "./providers";
+import { OperationProvider } from "./store/operationsContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,12 +23,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <DataProvider>
-        <body className={inter.className}>
-          <Navbar />
-          {children}
-        </body>
-      </DataProvider>
+      <AlertDialogProvider>
+        <OperationProvider>
+          <UserProvider>
+            <DataProvider>
+              <Providers>
+                <body className={inter.className}>
+                  <Navbar />
+                  <AlertDialogComponent />
+                  {children}
+                </body>
+              </Providers>
+            </DataProvider>
+          </UserProvider>
+        </OperationProvider>
+      </AlertDialogProvider>
     </html>
   );
 }

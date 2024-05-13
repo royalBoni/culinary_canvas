@@ -4,6 +4,9 @@ import Image from "next/image";
 import { chefType, recipeType } from "@/app/schema/recipe";
 import { Button } from "./button";
 import Recipy_card from "./recipy_card";
+import { UseUserContext } from "@/app/store/userContext";
+import { UserCog } from "lucide-react";
+import { SlugType } from "@/app/(chefsAndRecipies)/recipies/[slug]/page";
 
 type RecipiesAndCategoryType = {
   categories: string[];
@@ -13,11 +16,14 @@ type RecipiesAndCategoryType = {
 const ChefChildPage = ({
   recipiesAndCategory,
   chef,
+  params,
 }: {
   recipiesAndCategory: RecipiesAndCategoryType;
   chef: chefType;
+  params: SlugType;
 }) => {
   const [activeCategory, setActiveCategory] = useState("All Categories");
+  const { user } = UseUserContext();
 
   const selectCategory = (category: string) => {
     setActiveCategory(category);
@@ -48,7 +54,13 @@ const ChefChildPage = ({
             </div>
           </div>
 
-          <Button>Follow</Button>
+          {user?.id === Number(params.slug) ? (
+            <Button>
+              <UserCog />
+            </Button>
+          ) : (
+            <Button>Follow</Button>
+          )}
 
           <div className="text-pink-500 flex gap-5">
             <div>

@@ -19,11 +19,6 @@ const returnChef = async (id: number) => {
   return chef as chefType;
 };
 
-const returnComments = async (id: number) => {
-  const comments = await getProductComments(id);
-  return comments as commentType[];
-};
-
 const SingleRecipe = async ({ params }: { params: SlugType }) => {
   const { slug } = params;
   const recipe: recipeType = await getRecipeById(slug);

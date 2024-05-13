@@ -1,17 +1,14 @@
 "use client";
-import React from "react";
-import { getAllChefs, getRecipies } from "@/lib/actions";
-import { recipeType, chefType } from "@/app/schema/recipe";
+import React, { Suspense } from "react";
 import Recipy_card from "@/components/recipy_card";
 import { useDataContext } from "@/app/store/data-context";
+import { UseUserContext } from "@/app/store/userContext";
 
 const Recipies = () => {
-  /* const { addChefs, addRecipies } = useDataContext(); */
-
   const { chefs, recipies } = useDataContext();
-  /*  const chefs: chefType[] = await getAllChefs();
-  addChefs(chefs);
-  addRecipies(recipies); */
+  const { user } = UseUserContext();
+
+  console.log(user);
 
   return (
     <section className="flex flex-col gap-10 w-3/4 text-white font-bold">

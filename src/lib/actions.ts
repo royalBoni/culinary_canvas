@@ -2,6 +2,7 @@ import { recipes } from "../../recipies-data";
 import { chefs } from "../../chefs-data";
 import { comments } from "../../comments";
 import { chefType, recipeType, commentType } from "@/app/schema/recipe";
+import { CheftLoginOrSignUpType } from "@/components/forms/AuthenticationForm";
 
 /* type CategoryArrayType ={
 	category?:string,
@@ -22,8 +23,8 @@ export const getAllChefs = async () => {
   return chefs as chefType[];
 };
 
-export const getChef = async (id: number) => {
-  const findChef = await chefs.find((chef) => chef.id === Number(id));
+export const getChef = (id: number) => {
+  const findChef = chefs.find((chef) => chef.id === Number(id));
 
   return findChef as chefType;
 };
@@ -36,8 +37,8 @@ export const getProductComments = async (id: number) => {
   return findComments as commentType[];
 };
 
-export const getChefPostedCategories = async (id: number) => {
-  const allCategoriesRecipies = await recipes.filter(
+export const getChefPostedCategories = (id: number) => {
+  const allCategoriesRecipies = recipes.filter(
     (recipe) => recipe.chefId === Number(id)
   );
   // Create an object to store categories and their counts for each chef
@@ -53,4 +54,16 @@ export const getChefPostedCategories = async (id: number) => {
   });
 
   return { recipes: allCategoriesRecipies, categories: newArray };
+};
+
+export const loginUser = (data: CheftLoginOrSignUpType) => {
+  const findUserToLogin = chefs.find(
+    (chef) => chef.password_hash === data.password && chef.email === data.email
+  );
+  return findUserToLogin;
+  /* if (findUserToLogin) {
+    return findUserToLogin;
+  } else {
+    return "nothing was found";
+  } */
 };

@@ -75,12 +75,15 @@ export const updateRecipe = async (id: number, recipeData: any) => {
 
 export const deleteRecipe = async (id: number) => {
   try {
+    await db.delete(comments).where(eq(comments.recipe_id, id)).execute();
+    await db.delete(likes).where(eq(likes.recipe_id, id)).execute();
+
     const result = await db
       .delete(recipes)
       .where(eq(recipes.id, id))
       .returning()
       .execute();
-
+    console.log(result);
     if (result.length === 0) {
       return null;
     }

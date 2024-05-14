@@ -6,26 +6,12 @@ import { revalidatePath } from "next/cache";
 
 export const readUsers = async () => {
   try {
-    revalidatePath("/api/users/list"); // Refresh cache
+    revalidatePath("/api/users"); // Refresh cache
     const data = await db.select().from(users);
     console.log("Data fetched:", data);
     return data || [];
   } catch (error) {
     return [];
-  }
-};
-
-export const getUser = async (userId: number) => {
-  try {
-    const user = await db.select().from(users).where(eq(users.id, userId));
-
-    const followers = await getFollowersOfUser(userId);
-    const following = await getUsersUserFollows(userId);
-
-    return { ...user[0], followers, following };
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    return null;
   }
 };
 
@@ -36,6 +22,22 @@ export const createUser = async (user: NewUser) => {
     return newUser;
   } catch (error) {
     console.error("Error creating new user:", error);
+    return null;
+  }
+};
+
+export const getUser = async (userId: number) => {
+  try {
+    const user = await db.select().from(users).where(eq(users.id, userId));
+    console.log(user);
+    if (user.length === 0) return null;
+
+    const followers = await getFollowersOfUser(userId);
+    const following = await getUsersUserFollows(userId);
+
+    return { ...user[0], followers, following };
+  } catch (error) {
+    console.error("Error fetching user:", error);
     return null;
   }
 };

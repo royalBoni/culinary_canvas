@@ -29,3 +29,4 @@ export const userRelations = relations(users, ({ many }) => ({
 
 export type NewUser = typeof users.$inferInsert;
 export const insertUserSchema = createInsertSchema(users);
+export const selectUserSchema = createSelectSchema(users);

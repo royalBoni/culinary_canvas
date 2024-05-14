@@ -1,19 +1,31 @@
 import { insertRecipeSchema, NewRecipe } from "@/db/schema/recipe";
-import {
-  addLike,
-  deleteRecipe,
-  getRecipe,
-  removeLike,
-  updateRecipe,
-} from "@/server/recipe";
+import { addLike, createLike, removeLike } from "@/server/like";
+import { deleteRecipe, getRecipe, updateRecipe } from "@/server/recipe";
+import { NextApiRequest } from "next";
+import { revalidatePath } from "next/cache";
 
 export const GET = async (
-  req: Request,
+  req: NextApiRequest,
   { params }: { params: { id: number } }
 ) => {
   try {
     const id = params.id;
-    const recipe = await getRecipe(id);
+    const host = req.headers.host ?? "localhost:3000";
+    const baseUrl = `https://${host}`;
+
+    const fullUrl = new URL(req.url ?? "", baseUrl);
+
+    const includeChef = fullUrl.searchParams.get("includeChef") === "true";
+    const includeComments =
+      fullUrl.searchParams.get("includeComments") === "true";
+    const includeLikes = fullUrl.searchParams.get("includeLikes") === "true";
+
+    const recipe = await getRecipe(
+      id,
+      includeChef,
+      includeLikes,
+      includeComments
+    );
 
     if (!recipe) {
       return Response.json(
@@ -55,7 +67,7 @@ export const PUT = async (
     const newRecipe = await updateRecipe(id, recipe);
     if (!newRecipe)
       return Response.json({ error: "Recipe not found" }, { status: 404 });
-
+    revalidatePath(`/api/recipes/${id}`);
     return Response.json(newRecipe);
   } catch (error) {
     console.log(error);
@@ -74,6 +86,7 @@ export const DELETE = async (
     const recipe = await deleteRecipe(id);
     if (!recipe)
       return Response.json({ error: "Recipe not found" }, { status: 404 });
+    revalidatePath("api/recipes");
     return Response.json(recipe);
   } catch (error) {
     console.log(error);

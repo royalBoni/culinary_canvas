@@ -1,4 +1,5 @@
-import { addComment } from "@/server/recipe";
+import { createComment } from "@/server/comment";
+import { revalidatePath } from "next/cache";
 
 export const POST = async (
   req: Request,
@@ -17,7 +18,8 @@ export const POST = async (
       );
     }
 
-    const newComment = await addComment(userId, recipeId, content);
+    const newComment = await createComment(userId, recipeId, content);
+    revalidatePath(`/api/recipes/${recipeId}`);
     return Response.json(newComment, { status: 201 });
   } catch (error) {
     console.error(error);

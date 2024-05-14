@@ -1,8 +1,8 @@
-import { and, eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { db } from "@/db";
-import { follows, NewFollow } from "@/db/schema/follow";
 import { NewUser, users } from "@/db/schema/user";
 import { revalidatePath } from "next/cache";
+import { getFollowers, getFollowing } from "./follow";
 
 export const readUsers = async () => {
   try {
@@ -26,112 +26,48 @@ export const createUser = async (user: NewUser) => {
   }
 };
 
-export const getUser = async (userId: number) => {
+export const getUser = async (
+  userId: number,
+  includeFollowers = false,
+  includeFollowing = false
+) => {
   try {
     const user = await db.select().from(users).where(eq(users.id, userId));
-    console.log(user);
     if (user.length === 0) return null;
 
-    const followers = await getFollowersOfUser(userId);
-    const following = await getUsersUserFollows(userId);
+    const userData: any = { ...user[0] };
 
-    return { ...user[0], followers, following };
+    if (includeFollowers) {
+      userData.followers = await getFollowers(userId);
+    }
+
+    if (includeFollowing) {
+      userData.following = await getFollowing(userId);
+    }
+
+    return userData;
   } catch (error) {
     console.error("Error fetching user:", error);
     return null;
   }
 };
 
-const getFollowersOfUser = async (userId: number) => {
+export const checkUserCredentials = async (
+  username: string,
+  password: string
+) => {
   try {
-    const followers = await db
-      .select({
-        userId: users.id,
-        userName: users.username,
-        followerId: follows.id,
-      })
-      .from(users)
-      .innerJoin(follows, eq(follows.followee_id, userId))
-      .where(eq(users.id, follows.follower_id))
-      .all();
-
-    return followers || [];
-  } catch (error) {
-    console.error("Error fetching followers:", error);
-    return [];
-  }
-};
-
-const getUsersUserFollows = async (userId: number) => {
-  try {
-    const following = await db
-      .select({
-        userId: users.id,
-        userName: users.username,
-        followeeId: follows.id,
-      })
-      .from(users)
-      .innerJoin(follows, eq(follows.follower_id, userId))
-      .where(eq(users.id, follows.followee_id))
-      .all();
-
-    return following || [];
-  } catch (error) {
-    console.error("Error fetching followed users:", error);
-    return [];
-  }
-};
-
-export const addFollow = async (followerId: number, followeeId: number) => {
-  try {
-    if (followerId === followeeId) {
-      throw new Error("Users cannot follow themselves.");
-    }
-    console.log("followerId", followerId);
-    console.log("followeeId", followeeId);
-    const existingFollow = await db
+    const user = await db
       .select()
-      .from(follows)
+      .from(users)
       .where(
-        and(
-          eq(follows.followee_id, followeeId),
-          eq(follows.follower_id, followerId)
-        )
-      );
-
-    if (existingFollow.length > 0) {
-      throw new Error("Follow relationship already exists.");
-    }
-
-    const followData: NewFollow = {
-      follower_id: followerId,
-      followee_id: followeeId,
-    };
-
-    const newFollow = await db.insert(follows).values(followData).returning();
-    revalidatePath("/api/users");
-    return newFollow;
-  } catch (error) {
-    console.error("Error adding follow:", error);
-    return null;
-  }
-};
-
-export const removeFollow = async (followerId: number, followeeId: number) => {
-  try {
-    const result = await db
-      .delete(follows)
-      .where(
-        and(
-          eq(follows.followee_id, followeeId),
-          eq(follows.follower_id, followerId)
-        )
+        and(eq(users.username, username), eq(users.password_hash, password))
       )
-      .returning();
-    revalidatePath("/api/users");
-    return result;
+      .execute();
+
+    return user.length > 0 ? user[0] : null;
   } catch (error) {
-    console.error("Error removing follow:", error);
-    return null;
+    console.error("Authentication error:", error);
+    throw error;
   }
 };

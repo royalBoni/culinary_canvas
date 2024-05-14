@@ -1,14 +1,27 @@
-import { addFollow, getUser, removeFollow } from "@/server/user";
+import { createFollow, removeFollow } from "@/server/follow";
+import { getUser } from "@/server/user";
+import { NextApiRequest } from "next";
+import { revalidatePath } from "next/cache";
 
 export const dynamic = "force-dynamic";
 
 export const GET = async (
-  req: Request,
+  req: NextApiRequest,
   { params }: { params: { id: number } }
 ) => {
   try {
     const id = params.id;
-    const user = await getUser(id);
+    const host = req.headers.host ?? "localhost:3000";
+    const baseUrl = `https://${host}`;
+
+    const fullUrl = new URL(req.url ?? "", baseUrl);
+
+    const includeFollowers =
+      fullUrl.searchParams.get("includeFollowers") === "true";
+    const includeFollowing =
+      fullUrl.searchParams.get("includeFollowing") === "true";
+
+    const user = await getUser(id, includeFollowers, includeFollowing);
 
     if (!user) {
       return Response.json({ error: "User does not exist." }, { status: 404 });
@@ -34,22 +47,22 @@ export const PATCH = async (
 
     if (action && followerId) {
       if (action === "follow") {
-        const newFollow = await addFollow(followerId, followeeId);
+        const newFollow = await createFollow(followeeId, followerId);
         if (!newFollow)
           return Response.json(
             { error: "Follow already exists." },
             { status: 409 }
           );
-
+        revalidatePath(`/api/users/${followeeId}`);
         return Response.json(newFollow);
       } else if (action === "unfollow") {
-        const result = await removeFollow(followerId, followeeId);
+        const result = await removeFollow(followeeId, followerId);
         if (!result)
           return Response.json(
             { error: "Follow does not exist." },
             { status: 404 }
           );
-
+        revalidatePath(`/api/users/${followeeId}`);
         return Response.json(result);
       }
     }

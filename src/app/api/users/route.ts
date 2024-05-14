@@ -1,5 +1,19 @@
 import { insertUserSchema, NewUser } from "@/db/schema/user";
 import { createUser } from "@/server/user";
+import { revalidatePath } from "next/cache";
+
+import { readUsers } from "@/server/user";
+export const dynamic = "force-dynamic";
+export const GET = async () => {
+  try {
+    const allUsers = await readUsers();
+    return Response.json(allUsers);
+  } catch (error) {
+    console.log(error);
+
+    return Response.json({ error: "Something went wrong" }, { status: 500 });
+  }
+};
 
 export const POST = async (req: Request) => {
   const body = await req.json();
@@ -20,7 +34,7 @@ export const POST = async (req: Request) => {
     const newUser = await createUser(user);
     if (!newUser)
       return Response.json({ error: "User already exists" }, { status: 409 });
-
+    revalidatePath("/api/users");
     return Response.json(newUser, { status: 201 });
   } catch (error) {
     console.log(error);

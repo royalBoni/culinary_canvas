@@ -4,17 +4,13 @@ import React, { useState } from "react";
 import styles from "./links.module.css";
 import NavLink from "@/components/navbar/links/NavLink/NavLink";
 import Image from "next/image";
-<<<<<<< HEAD
-import { Button } from "@/components/button";
 import { UseUserContext } from "@/app/store/userContext";
 import { useAlertDialogContext } from "@/app/store/alertDialogContext";
 import { UseOperationContext } from "@/app/store/operationsContext";
 import { useRouter } from "next/navigation";
 import { User, Cross, CrossIcon, Plus } from "lucide-react";
 import Link from "next/link";
-=======
 import { Button } from "@/components/Button";
->>>>>>> 2e1cfca776e0909e9a194407b603b3bb18932a23
 
 export type linkType = {
   title: string;
@@ -41,11 +37,14 @@ const Links = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.links}>
-        {links.map((link: linkType) => (
-          <NavLink item={link} key={link.title} />
-        ))}
+    <div className="flex gap-5 items-center">
+      <div className="flex gap-3 items-center">
+        <div className={styles.links}>
+          {links.map((link: linkType) => (
+            <NavLink item={link} key={link.title} />
+          ))}
+        </div>
+
         {!user ? (
           <Button onClick={() => selectOperation("loginOrCreateAccount")}>
             Login

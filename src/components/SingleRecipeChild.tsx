@@ -8,16 +8,19 @@ import { recipeType, commentType, chefType } from "@/app/schema/recipe";
 import { Flame, AlarmClock, Heart, MessageCircleMore } from "lucide-react";
 import * as Accordion from "@radix-ui/react-accordion";
 import { AccordionTrigger, AccordionContent } from "@radix-ui/react-accordion";
-import * as AlertDialog from "@radix-ui/react-alert-dialog";
 import CommentCard from "./commentCard";
-import FormComponent from "./forms/AuthenticationForm";
-<<<<<<< HEAD:src/components/singleRecipeChild.tsx
-import Popular_chef_card from "./popular_chefs_card";
+
 import { useAlertDialogContext } from "@/app/store/alertDialogContext";
 import { UseUserContext } from "@/app/store/userContext";
-=======
+import { UseOperationContext } from "@/app/store/operationsContext";
+import {
+  returnNumberOfComments,
+  returnNumberOfLikes,
+  checkRecipeLikeForUser,
+} from "@/lib/actions";
+
 import PopularChefCard from "./PopularChefCard";
->>>>>>> 2e1cfca776e0909e9a194407b603b3bb18932a23:src/components/SingleRecipeChild.tsx
+
 import "../app/(chefsAndRecipies)/recipies/[slug]/styles.css";
 
 const wait = () => new Promise((resolve) => setTimeout(resolve, 1000));
@@ -37,17 +40,28 @@ const SingleRecipeChild = ({
     setImageUrl(url);
   }, []);
 
-  const { alertDialog, openOrCloseAlertDialog } = useAlertDialogContext();
+  const { openOrCloseAlertDialog } = useAlertDialogContext();
   const { user } = UseUserContext();
+  const { specifyOperation } = UseOperationContext();
+
+  const selectCommentOperation = () => {
+    if (user) {
+      openOrCloseAlertDialog(true);
+      specifyOperation("comment");
+    } else {
+      openOrCloseAlertDialog(true);
+      specifyOperation("create-account");
+    }
+  };
 
   return (
-    <div className="h-screen relative ">
+    <div className="h-auto relative lg:w-3/4 w-full">
       <div>
         <Link href={"/recipies"}>View more from chef</Link>
       </div>
-      <div className="w-5/5 flex gap-10 heights">
-        <div className="w-3/5 heights flex gap-5">
-          <div className="flex flex-col gap-2 heights overflow-y-auto bg-black w-1/3">
+      <div className="w-5/5 grid gap-10 h-auto lg:heights lg:flex">
+        <div className="w-5/5 heights flex flex-col-reverse gap-5 lg:w-3/5 lg:flex-row">
+          <div className="flex flex-row gap-2 heights overflow-y-auto bg-black w-3/3 lg:w-1/3 lg:flex-col ">
             {recipeImage.map((image) => (
               <Image
                 key={image}
@@ -55,22 +69,22 @@ const SingleRecipeChild = ({
                 alt=""
                 width={400}
                 height={400}
-                className="object-cover p-3 rounded-3xl"
+                className="object-cover p-3 rounded-3xl w-40 h-40 lg:w-64 lg:h-64"
                 onClick={() => returnClickedImage(image)}
               />
             ))}
           </div>
-          <div className="bg-black w-2/3 flex items-center justify-center">
+          <div className="bg-black w-3/3 flex items-center justify-center lg:w-2/3">
             <Image
               src={imageUrl}
               alt=""
               width={400}
               height={400}
-              className="object-cover w-4/5 h-4/5"
+              className="object-cover w-5/5 h-5/5 lg:h-4/5  lg:w-4/5"
             />
           </div>
         </div>
-        <div className="w-2/5 bg-black flex flex-col gap-5 p-5 info heights overflow-y-auto">
+        <div className="w-5/5 bg-black flex flex-col gap-5 p-5 info lg:h-auto lg:w-2/5 heights overflow-y-auto">
           <h1 className="text-pink-500 font-bold text-3xl">{recipe.name}</h1>
           <div>
             <h1 className="text-pink-500 font-bold">INGREDIENTS:</h1>
@@ -94,11 +108,34 @@ const SingleRecipeChild = ({
           {/*  SOCIALS */}
           <div className="flex gap-5">
             <div className="text-red-500 flex gap-2 hover:text-gray-500 hover:cursor-pointer">
-              <Heart onClick={() => !user && openOrCloseAlertDialog(true)} /> 12
+              <Heart onClick={() => !user && openOrCloseAlertDialog(true)} />{" "}
+              {returnNumberOfLikes(recipe.id)}
             </div>
             <div className="text-indigo-500 flex gap-2 hover:text-gray-500 hover:cursor-pointer">
-              <MessageCircleMore onClick={() => openOrCloseAlertDialog(true)} />{" "}
-              22
+              <MessageCircleMore onClick={selectCommentOperation} />{" "}
+              {returnNumberOfComments(recipe.id)}
+            </div>
+          </div>
+
+          {/* SOCIALS INTERACTION*/}
+          <div className="flex justify-between border-t-2 py-2 border-gray-500">
+            <div className="text-gray-500 flex gap-2 hover:text-white">
+              <Heart
+                className={`${
+                  user?.id
+                    ? checkRecipeLikeForUser(user?.id, recipe.id)
+                      ? "fill-red-500 border-red-500"
+                      : ""
+                    : ""
+                }`}
+              />{" "}
+              Like
+            </div>
+            <div
+              className="text-gray-500 flex gap-2 hover:text-white"
+              onClick={selectCommentOperation}
+            >
+              <MessageCircleMore /> Comment
             </div>
           </div>
           <Accordion.Root
@@ -148,10 +185,6 @@ const SingleRecipeChild = ({
           </div>
         </div>
       </div>
-
-      {/*  <FormProvider {...methods}>
-        <FormTextField name="input" label="name" />
-      </FormProvider> */}
     </div>
   );
 };

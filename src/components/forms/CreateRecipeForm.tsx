@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FormTextField } from "../form-fields";
 import { recipeType } from "@/app/schema/recipe";
 import { UseUserContext } from "@/app/store/userContext";
-import { Button } from "../button";
+import { Button } from "../Button";
 import { Select } from "../form-fields/Select";
 import { ImagePlus, X } from "lucide-react";
 import { FormTextArea } from "../form-fields/TextArea";
@@ -79,7 +79,7 @@ const CreateRecipeForm = () => {
 
   return (
     <FormProvider {...methods}>
-      <div className=" overflow-y-scroll h-5/6 w-1/2 font-serif radial p-14 flex flex-col gap-6">
+      <div className=" overflow-y-scroll h-screen w-full lg:w-1/2 lg:h-5/6 font-serif radial p-14 flex flex-col gap-6">
         <div className="flex justify-between items-center border-b-2 py-5 border-white">
           <h1 className="text-5xl font-bold text-white">Create a Recipe</h1>
           <Button>
@@ -91,7 +91,6 @@ const CreateRecipeForm = () => {
           onSubmit={methods.handleSubmit(onSubmitNewGift)}
         >
           <FormTextField name="name" label="Name" type="text" />
-          <FormTextField name="description" label="Description" type="text" />
           <FormTextField
             name="calories"
             label="Number Calories"

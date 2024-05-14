@@ -28,7 +28,7 @@ const randomColorGenerator = () => {
 const NavigationMenuDemo = () => {
   return (
     <NavigationMenu.Root>
-      <NavigationMenu.List className="flex gap-5 bg-black rounded-full p-3 text-white">
+      <NavigationMenu.List className="gap-5 bg-black rounded-full p-3 text-white lg:flex hidden">
         {recipyHeaderItems.map((recipyHeaderItem) => (
           <NavigationMenu.Item>
             <NavigationMenu.Trigger className="p-2 font-bold">

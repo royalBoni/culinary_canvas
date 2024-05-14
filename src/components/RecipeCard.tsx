@@ -4,14 +4,35 @@ import { Heart, MessageCircleMore } from "lucide-react";
 import { chefType, recipeType } from "@/app/schema/recipe";
 import { Button } from "./Button";
 import Link from "next/link";
-import { getChef } from "@/lib/actions";
+import { UseUserContext } from "@/app/store/userContext";
+import { UseOperationContext } from "@/app/store/operationsContext";
+import { useAlertDialogContext } from "@/app/store/alertDialogContext";
+import {
+  returnNumberOfComments,
+  returnNumberOfLikes,
+  getChef,
+  checkRecipeLikeForUser,
+} from "@/lib/actions";
 
-export const returnChef = async (id: number) => {
-  const chef = await getChef(id);
+export const returnChef = (id: number) => {
+  const chef = getChef(id);
   return chef as chefType;
 };
 
-const RecipeCard = async ({ recipe }: { recipe: recipeType }) => {
+const RecipeCard = ({ recipe }: { recipe: recipeType }) => {
+  const { user } = UseUserContext();
+  const { openOrCloseAlertDialog } = useAlertDialogContext();
+  const { specifyOperation } = UseOperationContext();
+
+  const selectCommentOperation = () => {
+    if (user) {
+      openOrCloseAlertDialog(true);
+      specifyOperation("comment");
+    } else {
+      openOrCloseAlertDialog(true);
+      specifyOperation("create-account");
+    }
+  };
   return (
     <div className="flex flex-col gap-2">
       <div className="p-5 rounded-lg text-white bg-black flex flex-col gap-3 border-4 border-transparent hover:border-pink-400">
@@ -42,7 +63,7 @@ const RecipeCard = async ({ recipe }: { recipe: recipeType }) => {
               className="rounded-full w-12 h-12"
             />{" "}
             <span className="text-gray-500">
-              {(await returnChef(recipe.chefId)).username}
+              {returnChef(recipe.chefId).username}
             </span>
           </div>
           <div>{recipe.countryOfOrigin.slice(0, 3).toUpperCase()}</div>
@@ -52,10 +73,32 @@ const RecipeCard = async ({ recipe }: { recipe: recipeType }) => {
 
         <div className="flex justify-around">
           <div className="text-red-500 flex gap-2">
-            <Heart /> 12
+            <Heart className="" /> {returnNumberOfLikes(recipe.id)}
           </div>
           <div className="text-indigo-500 flex gap-2">
-            <MessageCircleMore /> 22
+            <MessageCircleMore /> {returnNumberOfComments(recipe.id)}
+          </div>
+        </div>
+
+        {/* SOCIALS INTERACTION*/}
+        <div className="flex justify-between border-t-2 py-2 border-gray-500">
+          <div className="text-gray-500 flex gap-2 hover:text-white">
+            <Heart
+              className={`${
+                user?.id
+                  ? checkRecipeLikeForUser(user?.id, recipe.id)
+                    ? "fill-red-500 border-red-500"
+                    : ""
+                  : ""
+              }`}
+            />{" "}
+            Like
+          </div>
+          <div
+            className="text-gray-500 flex gap-2 hover:text-white"
+            onClick={selectCommentOperation}
+          >
+            <MessageCircleMore /> Comment
           </div>
         </div>
       </div>

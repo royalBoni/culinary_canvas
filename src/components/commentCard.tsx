@@ -11,16 +11,18 @@ const CommentCard = ({ comment }: { comment: commentType }) => {
   // Function to fetch the poster
   const fetchPoster = () => {
     // Return a promise chain using .then
-    return returnChef(comment.user_id).then((posterr: chefType) => {
+    const poster = returnChef(comment.user_id);
+    setPoster(poster);
+    /*  return returnChef(comment.user_id).then((posterr: chefType) => {
       // Once data is fetched, set the poster state
       setPoster(posterr);
-    });
+    }); */
   };
 
   // Use useEffect to fetch data when the component mounts
   useEffect(() => {
     fetchPoster();
-  }, []);
+  }, [fetchPoster]);
   return (
     <div className="bg-pink-500 rounded-lg flex flex-col gap-3 p-4 text-white">
       <div className="flex justify-between">

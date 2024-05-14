@@ -24,7 +24,7 @@ export const chefSchema = z.object({
   username: z.string(),
   email: z.string(),
   password_hash: z.string(),
-  profile_image_url: z.string(),
+  profile_image_url: z.any(),
   bio: z.string(),
   country: z.string(),
 });

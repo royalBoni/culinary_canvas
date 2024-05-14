@@ -26,29 +26,29 @@
     "@radix-ui/react-navigation-menu": "^1.1.4",
     "@tanstack/react-query": "^5.35.5",
     "date-fns": "^3.6.0",
-<<<<<<< HEAD
+
     "lucide-react": "^0.377.0",
     "next": "14.2.3",
     "npm-watch": "^0.13.0",
     "query": "github:tanstack/react-query",
     "react": "^18",
     "react-dom": "^18",
-=======
+
     "drizzle-orm": "^0.30.10",
     "lucide-react": "^0.378.0",
     "next": "^14.2.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
->>>>>>> 2e1cfca776e0909e9a194407b603b3bb18932a23
+
     "react-hook-form": "^7.51.4",
     "react-icons": "^5.2.1",
     "react-world-flags": "^1.6.0",
-<<<<<<< HEAD
+
     "watch": "^1.0.2",
-    "zod": "^3.23.5"
-=======
+    "zod": "^3.23.5",
+
     "zod": "^3.23.7"
->>>>>>> 2e1cfca776e0909e9a194407b603b3bb18932a23
+
   },
   "devDependencies": {
     "@types/node": "^20",

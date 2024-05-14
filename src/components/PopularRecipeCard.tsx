@@ -3,6 +3,7 @@ import Image from "next/image";
 import { AlarmClock, Flame, Heart, MessageCircleMore } from "lucide-react";
 import { recipeType } from "@/app/schema/recipe";
 import Link from "next/link";
+import { returnNumberOfComments, returnNumberOfLikes } from "@/lib/actions";
 
 const PopularRecipeCard = ({ recipe }: { recipe: recipeType }) => {
   return (
@@ -36,10 +37,10 @@ const PopularRecipeCard = ({ recipe }: { recipe: recipeType }) => {
             <div className="flex justify-between gap-3">
               <div className="flex gap-4">
                 <div className="text-gray-500 flex gap-2">
-                  <Heart /> 12
+                  <Heart /> {returnNumberOfLikes(recipe.id)}
                 </div>
                 <div className="text-gray-500 flex gap-2">
-                  <MessageCircleMore /> 22
+                  <MessageCircleMore /> {returnNumberOfComments(recipe.id)}
                 </div>
               </div>
             </div>

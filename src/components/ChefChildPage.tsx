@@ -2,16 +2,17 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { chefType, recipeType } from "@/app/schema/recipe";
-<<<<<<< HEAD:src/components/chefChildPage.tsx
-import { Button } from "./button";
-import Recipy_card from "./recipy_card";
+import { Button } from "./Button";
+import RecipeCard from "./RecipeCard";
 import { UseUserContext } from "@/app/store/userContext";
 import { UserCog } from "lucide-react";
 import { SlugType } from "@/app/(chefsAndRecipies)/recipies/[slug]/page";
-=======
-import { Button } from "./Button";
-import RecipeCard from "./RecipeCard";
->>>>>>> 2e1cfca776e0909e9a194407b603b3bb18932a23:src/components/ChefChildPage.tsx
+import { UseOperationContext } from "@/app/store/operationsContext";
+import { useAlertDialogContext } from "@/app/store/alertDialogContext";
+import { returnChefFollowers, returnChefFollowing } from "@/lib/actions";
+import { getAllChefs } from "@/lib/actions";
+import { returnLoggedInUserFollowingChef } from "@/lib/actions";
+import ChefListCard from "./ChefListCard";
 
 type RecipiesAndCategoryType = {
   categories: string[];
@@ -27,15 +28,30 @@ const ChefChildPage = ({
   chef: chefType;
   params: SlugType;
 }) => {
-  const [activeCategory, setActiveCategory] = useState("All Categories");
+  const [activeCategory, setActiveCatrgory] = useState("All Categories");
+  const [chefsListToDisplay, setChefsListToDisplay] = useState("Posts");
   const { user } = UseUserContext();
+  const { openOrCloseAlertDialog } = useAlertDialogContext();
+  const { specifyOperation } = UseOperationContext();
 
+  const chefs = getAllChefs();
+
+  const pageActionList = ["Posts", "Followers", "Following"];
   const selectCategory = (category: string) => {
-    setActiveCategory(category);
+    setActiveCatrgory(category);
+  };
+
+  const selectAction = (action: string) => {
+    setChefsListToDisplay(action);
+  };
+
+  const selectOperation = (operation: string) => {
+    openOrCloseAlertDialog(true);
+    specifyOperation(operation);
   };
 
   return (
-    <div className="h-auto flex flex-col">
+    <div className="h-auto flex flex-col w-4/4 lg:w-3/4">
       <div className="bg-[url('/noavatar.png')] backgroungImage max-w-full relative min-h-80">
         <Image
           src={
@@ -61,18 +77,26 @@ const ChefChildPage = ({
 
           {user?.id === Number(params.slug) ? (
             <Button>
-              <UserCog />
+              <UserCog onClick={() => selectOperation("edit-profile")} />
             </Button>
           ) : (
-            <Button>Follow</Button>
+            <Button>
+              {user
+                ? returnLoggedInUserFollowingChef(user.id, chef.id)
+                  ? "Following"
+                  : "Follow"
+                : "Follow"}
+            </Button>
           )}
 
           <div className="text-pink-500 flex gap-5">
-            <div>
-              12K <span className="text-gray-500">Followers</span>
+            <div className="flex gap-1 items-center cursor:pointer">
+              {returnChefFollowers(chef.id).length}
+              <span className="text-gray-500 hover:text-white">Followers</span>
             </div>
-            <div>
-              12 <span className="text-gray-500">Following</span>
+            <div className="flex gap-1 items-center cursor-pointer">
+              {returnChefFollowing(chef.id).length}
+              <span className="text-gray-500 hover:text-white">Following</span>
             </div>
           </div>
 
@@ -91,27 +115,69 @@ const ChefChildPage = ({
           </div>
 
           <div className="flex gap-5 border-1 border-pink-500 border w-fit rounded-3xl p-1">
-            {recipiesAndCategory.categories.map((category) => (
+            {pageActionList.map((action) => (
               <div
                 className={`p-2 cursor-pointer ${
-                  category === activeCategory
+                  action === chefsListToDisplay
                     ? `bg-pink-500 text-white rounded-2xl`
                     : `text-pink-500`
                 }`}
-                key={category}
-                onClick={() => selectCategory(category)}
+                key={action}
+                onClick={() => selectAction(action)}
               >
-                {category}
+                {action}
               </div>
             ))}
           </div>
+
+          {chefsListToDisplay === "Posts" && (
+            <div className="flex gap-5 border-1 border-pink-500 border w-fit rounded-3xl p-1">
+              {recipiesAndCategory.categories.map((category) => (
+                <div
+                  className={`p-2 cursor-pointer ${
+                    category === activeCategory
+                      ? `bg-pink-500 text-white rounded-2xl`
+                      : `text-pink-500`
+                  }`}
+                  key={category}
+                  onClick={() => selectCategory(category)}
+                >
+                  {category}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
-      <div className="grid-cols-3 grid gap-5 mt-10">
-        {recipiesAndCategory.recipes.map((recipe) => (
-          <RecipeCard recipe={recipe} />
-        ))}
-      </div>
+      <>
+        {chefsListToDisplay === "Posts" ? (
+          <div className="grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid gap-5 mt-10">
+            {recipiesAndCategory.recipes.map((recipe) => (
+              <RecipeCard key={recipe.id} recipe={recipe} />
+            ))}
+          </div>
+        ) : chefsListToDisplay === "Followers" ? (
+          <div className="grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid gap-5  mt-10">
+            {returnChefFollowers(chef.id).map((item) =>
+              chefs.map((chefItem) => {
+                if (chefItem.id === item.fan_id) {
+                  return <ChefListCard chef={chefItem} key={chefItem.id} />;
+                }
+              })
+            )}
+          </div>
+        ) : (
+          <div className="grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid gap-5 mt-10">
+            {returnChefFollowing(chef.id).map((item) =>
+              chefs.map((chefItem) => {
+                if (chefItem.id === item.chef_id) {
+                  return <ChefListCard chef={chefItem} key={chefItem.id} />;
+                }
+              })
+            )}
+          </div>
+        )}
+      </>
     </div>
   );
 };

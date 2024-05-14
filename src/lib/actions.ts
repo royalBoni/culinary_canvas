@@ -1,6 +1,8 @@
 import { recipes } from "../../recipies-data";
 import { chefs } from "../../chefs-data";
+import { likes } from "../../likes";
 import { comments } from "../../comments";
+import { follows } from "../../follows";
 import { chefType, recipeType, commentType } from "@/app/schema/recipe";
 import { CheftLoginOrSignUpType } from "@/components/forms/AuthenticationForm";
 
@@ -19,7 +21,7 @@ export const getRecipe = async (id: number) => {
   return findRecipe as recipeType;
 };
 
-export const getAllChefs = async () => {
+export const getAllChefs = () => {
   return chefs as chefType[];
 };
 
@@ -66,4 +68,59 @@ export const loginUser = (data: CheftLoginOrSignUpType) => {
   } else {
     return "nothing was found";
   } */
+};
+
+export const returnNumberOfComments = (recipe_id: number) => {
+  const findCommentedRecipe = comments.filter(
+    (comment) => comment.recipe_id === Number(recipe_id)
+  );
+  return findCommentedRecipe.length;
+};
+
+export const returnNumberOfLikes = (like_id: number) => {
+  const findLikedRecipe = likes.filter(
+    (like) => like.recipe_id === Number(like_id)
+  );
+  return findLikedRecipe.length;
+};
+
+export const checkRecipeLikeForUser = (user_id: number, recipe_id: number) => {
+  const findLikedRecipe = likes.find(
+    (like) =>
+      like.liker_id === Number(user_id) && recipe_id === Number(like.recipe_id)
+  );
+  if (findLikedRecipe) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+export const returnChefFollowers = (user_id: number) => {
+  const chefFollowers = follows.filter(
+    (follow) => follow.chef_id === Number(user_id)
+  );
+  return chefFollowers;
+};
+
+export const returnChefFollowing = (user_id: number) => {
+  const chefFollowing = follows.filter(
+    (follow) => follow.fan_id === Number(user_id)
+  );
+  return chefFollowing;
+};
+
+export const returnLoggedInUserFollowingChef = (
+  user_id: number,
+  chef_id: number
+) => {
+  const chefFollowing = follows.find(
+    (follow) =>
+      follow.fan_id === Number(user_id) && follow.chef_id === Number(chef_id)
+  );
+  if (chefFollowing) {
+    return true;
+  } else {
+    return false;
+  }
 };

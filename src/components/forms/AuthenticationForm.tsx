@@ -9,7 +9,8 @@ import {
 } from "react-hook-form";
 import { loginUser } from "@/lib/actions";
 import { useRouter } from "next/navigation";
-import { Button } from "../button";
+
+import { Button } from "../Button";
 import { Check, ArrowRight } from "lucide-react";
 import { UseUserContext } from "@/app/store/userContext";
 import { useAlertDialogContext } from "@/app/store/alertDialogContext";
@@ -78,8 +79,8 @@ const FormComponent =
 	}
  */
     return (
-      <div className="flex justify-center items-center h-5/6 w-4/5 font-serif">
-        <div className="w-1/2 bg-pink-500 h-full flex flex-col justify-center gap-4 p-14 text-white rounded-l-2xl">
+      <div className="flex justify-center items-center h-6/6 w-5/5 lg:w-4/5 lg:h-5/6 font-serif">
+        <div className="w-1/2 bg-pink-500 h-full hidden lg:flex flex-col justify-center gap-4 p-14 text-white rounded-l-2xl">
           <p className="text-5xl font-bold">Fun starts here</p>
           <div className="text-xl font-semibold flex flex-col gap-4 text-black">
             <p className="flex gap-3 items-center">
@@ -108,7 +109,7 @@ const FormComponent =
           </div> */}
         </div>
 
-        <div className="bg-black w-1/2 h-full text-pink-500 flex flex-col gap-2 p-14 rounded-r-2xl overflow-y-scroll">
+        <div className="bg-black w-2/2 lg:w-1/2 h-full text-pink-500 flex flex-col gap-2 p-14 rounded-r-2xl overflow-y-scroll">
           <h1 className="text-5xl font-bold">
             {formOperationState === "sign-up"
               ? "Create a new account"

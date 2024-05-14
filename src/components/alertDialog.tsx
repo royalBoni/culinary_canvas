@@ -6,6 +6,8 @@ import FormComponent from "./forms/AuthenticationForm";
 import "../app/(chefsAndRecipies)/recipies/[slug]/styles.css";
 import CreateRecipeForm from "./forms/CreateRecipeForm";
 import { UseOperationContext } from "@/app/store/operationsContext";
+import EditProfileForm from "./forms/EditProfileForm";
+import CommentForm from "./forms/CommentForm";
 
 const AlertDialogComponent = () => {
   const { alertDialog, openOrCloseAlertDialog } = useAlertDialogContext();
@@ -21,6 +23,10 @@ const AlertDialogComponent = () => {
           <AlertDialog.Content className="AlertDialogContent">
             {operation === "create-recipe" ? (
               <CreateRecipeForm />
+            ) : operation === "edit-profile" ? (
+              <EditProfileForm />
+            ) : operation === "comment" ? (
+              <CommentForm />
             ) : (
               <FormComponent />
             )}

@@ -13,7 +13,7 @@ const Recipies = () => {
   console.log(user);
 
   return (
-    <section className="flex flex-col gap-10 w-3/4 text-white font-bold">
+    <section className="flex flex-col gap-10 w-3/4 md:w-full text-white font-bold">
       <p>
         You have <span className="text-black">{recipies.length}</span> to
         explore

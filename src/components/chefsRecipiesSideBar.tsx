@@ -9,7 +9,6 @@ const ChefRecipiesSideBar = () => {
   const { chefs, recipies } = useDataContext();
 
   const pathName = usePathname();
-  console.log(pathName);
 
   return (
     <section className="flex-col w-1/4 flex gap-10 sticky-side-bar height">

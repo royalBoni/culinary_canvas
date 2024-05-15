@@ -2,7 +2,7 @@
 import React from "react";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 
-import "./recipiesNav.css";
+import "./RecipesNav.css";
 
 export const recipyHeaderItems = [
   { name: "ALL", items: [] },
@@ -28,9 +28,9 @@ const randomColorGenerator = () => {
 const NavigationMenuDemo = () => {
   return (
     <NavigationMenu.Root>
-      <NavigationMenu.List className="flex gap-5 bg-black rounded-full p-3 text-white">
-        {recipyHeaderItems.map((recipyHeaderItem, index) => (
-          <NavigationMenu.Item key={index}>
+      <NavigationMenu.List className="gap-5 bg-black rounded-full p-3 text-white lg:flex hidden">
+        {recipyHeaderItems.map((recipyHeaderItem) => (
+          <NavigationMenu.Item>
             <NavigationMenu.Trigger className="p-2 font-bold">
               {recipyHeaderItem.name}
             </NavigationMenu.Trigger>

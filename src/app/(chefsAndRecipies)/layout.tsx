@@ -1,27 +1,28 @@
-import type { Metadata } from "next";
+"use client";
+//import type { Metadata } from "next";
 
 import { type PropsWithChildren } from "react";
+import { usePathname } from "next/navigation";
 
-import ChefRecipiesSideBar from "@/components/chefsRecipiesSideBar";
-import ChefsRecipiesFilterNav from "@/components/navbar/chefsRecipiesFilterNav";
+import ChefRecipesSidebar from "@/components/ChefRecipesSidebar";
+import ChefRecipesFilterNav from "@/components/navbar/ChefRecipesFilterNav";
 
-export const metadata: Metadata = {
+/* export const metadata: Metadata = {
   title: "Culinary Canvas",
   description: "Your Home For The Best Recipes",
-};
+}; */
 
-const Layout = async ({ children }: PropsWithChildren) => {
-  /*  const recipies: recipeType[] = await getRecipies();
-  const chefs: chefType[] = await getAllChefs(); */
-
+const Layout = ({ children }: PropsWithChildren) => {
+  const pathName = usePathname();
   return (
     <>
       {" "}
-      <div className="flex flex-col gap-10 radial min-h-screen p-14 ">
-        <ChefsRecipiesFilterNav />
-        <div className="flex gap-20">
+      <div className="flex flex-col gap-10 radial min-h-screen py-2.5 md:p-14 ">
+        {pathName === "/recipies" && <ChefRecipesFilterNav />}
+
+        <div className="flex gap-20 justify-center">
           {children}
-          <ChefRecipiesSideBar />
+          <ChefRecipesSidebar />
         </div>
       </div>
     </>

@@ -2,9 +2,15 @@
 
 import React, { useState } from "react";
 import styles from "./links.module.css";
-import NavLink from "./navLink/navLink";
+import NavLink from "@/components/navbar/links/NavLink/NavLink";
 import Image from "next/image";
-import { Button } from "@/components/button";
+import { UseUserContext } from "@/app/store/userContext";
+import { useAlertDialogContext } from "@/app/store/alertDialogContext";
+import { UseOperationContext } from "@/app/store/operationsContext";
+import { useRouter } from "next/navigation";
+import { User, Cross, CrossIcon, Plus } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/Button";
 
 export type linkType = {
   title: string;
@@ -15,26 +21,45 @@ const links: linkType[] = [
   { title: "Recipies", path: "/recipies" },
   { title: "Chefs", path: "/chefs" },
   { title: "Blog", path: "/blog" },
-  { title: "FAQ", path: "/" },
 ];
 
 const Links = () => {
   const [open, setOpen] = useState(false);
 
-  const sessionLoggedIn = false;
+  const { user } = UseUserContext();
+
+  const { openOrCloseAlertDialog } = useAlertDialogContext();
+  const { specifyOperation } = UseOperationContext();
+
+  const selectOperation = (operation: string) => {
+    openOrCloseAlertDialog(true);
+    specifyOperation(operation);
+  };
+
   return (
-    <div className={styles.container}>
-      <div className={styles.links}>
-        {links.map((link: linkType) => (
-          <NavLink item={link} key={link.title} />
-        ))}
-        {!sessionLoggedIn ? (
-          <NavLink item={{ title: "login", path: "/login" }} />
+    <div className="flex gap-5 items-center">
+      <div className="flex gap-3 items-center">
+        <div className={styles.links}>
+          {links.map((link: linkType) => (
+            <NavLink item={link} key={link.title} />
+          ))}
+        </div>
+
+        {!user ? (
+          <Button onClick={() => selectOperation("loginOrCreateAccount")}>
+            Login
+          </Button>
         ) : (
           <>
-            {<NavLink item={{ title: "Profile", path: "/profile" }} />}
-
-            <Button>logout</Button>
+            <Button>
+              <Link href={`/chefs/${user.id}`}>
+                <User />
+              </Link>
+            </Button>
+            <Button onClick={() => selectOperation("create-recipe")}>
+              <Plus />
+            </Button>
+            <Button>Log out</Button>
           </>
         )}
       </div>

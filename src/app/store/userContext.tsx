@@ -6,8 +6,7 @@ import React, {
   Dispatch,
   SetStateAction,
 } from "react";
-import { chefType, recipeType } from "../schema/recipe";
-import { getAllChefs, getRecipies } from "@/lib/actions";
+import { chefType } from "../schema/recipe";
 
 export type UserContextType = {
   user: chefType | undefined;

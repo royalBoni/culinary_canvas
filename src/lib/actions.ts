@@ -77,14 +77,17 @@ export const returnNumberOfComments = (recipe_id: number) => {
   return findCommentedRecipe.length;
 };
 
-export const returnNumberOfLikes = (like_id: number) => {
+export const returnNumberOfLikes = (like_id: number | string) => {
   const findLikedRecipe = likes.filter(
     (like) => like.recipe_id === Number(like_id)
   );
   return findLikedRecipe.length;
 };
 
-export const checkRecipeLikeForUser = (user_id: number, recipe_id: number) => {
+export const checkRecipeLikeForUser = (
+  user_id: number | string,
+  recipe_id: number | string
+) => {
   const findLikedRecipe = likes.find(
     (like) =>
       like.liker_id === Number(user_id) && recipe_id === Number(like.recipe_id)
@@ -96,14 +99,14 @@ export const checkRecipeLikeForUser = (user_id: number, recipe_id: number) => {
   }
 };
 
-export const returnChefFollowers = (user_id: number) => {
+export const returnChefFollowers = (user_id: number | string) => {
   const chefFollowers = follows.filter(
     (follow) => follow.chef_id === Number(user_id)
   );
   return chefFollowers;
 };
 
-export const returnChefFollowing = (user_id: number) => {
+export const returnChefFollowing = (user_id: number | string) => {
   const chefFollowing = follows.filter(
     (follow) => follow.fan_id === Number(user_id)
   );
@@ -111,8 +114,8 @@ export const returnChefFollowing = (user_id: number) => {
 };
 
 export const returnLoggedInUserFollowingChef = (
-  user_id: number,
-  chef_id: number
+  user_id: number | string,
+  chef_id: number | string
 ) => {
   const chefFollowing = follows.find(
     (follow) =>

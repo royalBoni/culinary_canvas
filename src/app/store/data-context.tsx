@@ -1,14 +1,26 @@
 "use client";
-import { createContext, useContext, useState } from "react";
-import { chefType, recipeType } from "../schema/recipe";
-import { getAllChefs, getRecipies } from "@/lib/actions";
+
+import { createContext, useContext, useState, useEffect } from "react";
+import {
+  chefType,
+  recipeType,
+  likeType,
+  commentType,
+  followType,
+} from "../schema/recipe";
+import { useQuery } from "@tanstack/react-query";
 
 export type dataContextType = {
   chefs: chefType[];
-  recipies: recipeType[];
-  /*  addChefs: (chefs: chefType[]) => void;
-  addRecipies: (recipies: recipeType[]) => void; */
-  //setUser: (user: User) => void;
+  recipes: recipeType[];
+  likes: likeType[];
+  comments: commentType[];
+  follows: followType[];
+  addChefs: (chefs: chefType[]) => void;
+  addRecipes: (recipes: recipeType[]) => void;
+  addLikes: (likes: likeType[]) => void;
+  addComments: (comments: commentType[]) => void;
+  addFollows: (follows: followType[]) => void;
 };
 
 const DataContext = createContext<dataContextType | undefined>(undefined);
@@ -23,26 +35,48 @@ export const useDataContext = () => {
   return context;
 };
 
-// Provider component to wrap your application
-export const DataProvider = async ({ children }: { children: any }) => {
-  /* const [chefs, setChefs] = useState<chefType[]>([]);
-  const [recipies, setRecipies] = useState<recipeType[]>([]); */
+export const DataProvider = ({ children }: { children: any }) => {
+  const [chefs, setChefs] = useState<chefType[]>([]);
+  const [recipes, setRecipes] = useState<recipeType[]>([]);
+  const [likes, setLikes] = useState<likeType[]>([]);
+  const [comments, setComments] = useState<commentType[]>([]);
+  const [follows, setFollows] = useState<followType[]>([]);
 
-  /* const addRecipies = (recipies: recipeType[]) => {
-    setRecipies(recipies);
+  const addRecipes = (newRecipes: recipeType[]) => {
+    setRecipes(newRecipes);
   };
 
-  const addChefs = (chefs: chefType[]) => {
-    setChefs(chefs);
-  }; */
+  const addChefs = (newChefs: chefType[]) => {
+    setChefs(newChefs);
+  };
 
-  const recipies: recipeType[] = await getRecipies();
-  const chefs: chefType[] = await getAllChefs();
-  /* addChefs(chefs);
-  addRecipies(recipies); */
+  const addLikes = (newLikes: likeType[]) => {
+    setLikes(newLikes);
+  };
+
+  const addComments = (newComments: commentType[]) => {
+    setComments(newComments);
+  };
+
+  const addFollows = (newFollows: followType[]) => {
+    setFollows(newFollows);
+  };
 
   return (
-    <DataContext.Provider value={{ chefs, recipies }}>
+    <DataContext.Provider
+      value={{
+        likes,
+        chefs,
+        recipes,
+        comments,
+        follows,
+        addChefs,
+        addRecipes,
+        addLikes,
+        addComments,
+        addFollows,
+      }}
+    >
       {children}
     </DataContext.Provider>
   );

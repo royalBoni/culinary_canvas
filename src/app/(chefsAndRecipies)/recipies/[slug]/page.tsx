@@ -1,33 +1,49 @@
+"use client";
 import React from "react";
 import { getChef, getRecipe } from "@/lib/actions";
 import { recipeType, chefType, commentType } from "@/app/schema/recipe";
 import { getProductComments } from "@/lib/actions";
+import { useDataContext } from "@/app/store/data-context";
 import SingleRecipeChild from "@/components/SingleRecipeChild";
+import { useQuery } from "@tanstack/react-query";
 import "./styles.css";
 
 export type SlugType = {
   slug: number;
 };
 
-const getRecipeById = async (id: number) => {
-  const recipeObject = await getRecipe(id);
-  return recipeObject;
-};
-
-const returnChef = async (id: number) => {
-  const chef = await getChef(id);
-  return chef as chefType;
-};
-
-const SingleRecipe = async ({ params }: { params: SlugType }) => {
+const SingleRecipe = ({ params }: { params: SlugType }) => {
   const { slug } = params;
-  const recipe: recipeType = await getRecipeById(slug);
+  const { recipes, chefs, comments } = useDataContext();
 
-  const comments: commentType[] = await getProductComments(slug);
+  const getRecipeById = (id: number | number) => {
+    const findRecipe = recipes?.find(
+      (recipe) => Number(recipe.id) === Number(id)
+    );
 
-  const chef = await returnChef(recipe.chefId);
+    return findRecipe as recipeType;
+  };
 
-  return <SingleRecipeChild recipe={recipe} comments={comments} chef={chef} />;
+  const getProductComments = (id: number) => {
+    const findComments = comments?.filter(
+      (comment) => comment.recipe_id === Number(id)
+    );
+
+    return findComments;
+  };
+
+  const returnChef = (id: number | string) => {
+    const findChef = chefs?.find((chef) => Number(chef.id) === id);
+    return findChef as chefType;
+  };
+
+  const recipe: recipeType = getRecipeById(slug);
+
+  const commentss: commentType[] = getProductComments(slug);
+
+  const chef = returnChef(recipe?.chefId);
+
+  return <SingleRecipeChild recipe={recipe} comments={commentss} chef={chef} />;
 };
 
 export default SingleRecipe;

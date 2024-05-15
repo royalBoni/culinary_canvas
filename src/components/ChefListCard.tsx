@@ -10,13 +10,29 @@ import {
 } from "@/lib/actions";
 import { Button } from "./Button";
 import { UseUserContext } from "@/app/store/userContext";
+import { useDataContext } from "@/app/store/data-context";
 
 const ChefListCard = ({ chef }: { chef: chefType }) => {
   const router = useRouter();
   const { user } = UseUserContext();
+  const { follows } = useDataContext();
 
   const visitChefPage = (id: number) => {
     router.push(`/chefs/${id}`);
+  };
+
+  const returnChefFollowers = (user_id: number | string) => {
+    const chefFollowers = follows?.filter(
+      (follow) => Number(follow?.chef_id) === Number(user_id)
+    );
+    return chefFollowers;
+  };
+
+  const returnChefFollowing = (user_id: number | string) => {
+    const chefFollowing = follows?.filter(
+      (follow) => Number(follow?.fan_id) === Number(user_id)
+    );
+    return chefFollowing;
   };
   return (
     <div
@@ -30,7 +46,11 @@ const ChefListCard = ({ chef }: { chef: chefType }) => {
         <div className="h-1/2 bg-black"></div>
         <div className="h-4/5 absolute m-auto left-0 right-0 top-0 bottom-0 w-3/5">
           <Image
-            src={"/noavatar.png"}
+            src={
+              chef?.profile_image_url
+                ? `${chef?.profile_image_url}`
+                : "/noavatar.png"
+            }
             alt="noavatar"
             fill
             className="rounded-full"

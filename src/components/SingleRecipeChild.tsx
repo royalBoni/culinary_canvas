@@ -91,7 +91,7 @@ const SingleRecipeChild = ({
           <div className="bg-black w-3/3 flex items-center justify-center lg:w-2/3">
             <Image
               src={
-                recipe?.recipe_image_url
+                recipe?.recipe_image_url && recipe?.recipe_image_url !== "NAN"
                   ? `${recipe?.recipe_image_url}`
                   : "/noavatar.png"
               }

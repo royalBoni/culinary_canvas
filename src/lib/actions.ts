@@ -12,13 +12,13 @@ import { CheftLoginOrSignUpType } from "@/components/forms/AuthenticationForm";
 }|null */
 
 export const getRecipies = async () => {
-  return recipes as recipeType[];
+  /*  return recipes as recipeType[]; */
 };
 
 export const getRecipe = async (id: number) => {
   const findRecipe = await recipes.find((recipe) => recipe.id === Number(id));
 
-  return findRecipe as recipeType;
+  /* return findRecipe as recipeType; */
 };
 
 export const getAllChefs = () => {
@@ -36,7 +36,7 @@ export const getProductComments = async (id: number) => {
     (comment) => comment.recipe_id === Number(id)
   );
 
-  return findComments as commentType[];
+  /*   return findComments as commentType[]; */
 };
 
 export const getChefPostedCategories = (id: number) => {

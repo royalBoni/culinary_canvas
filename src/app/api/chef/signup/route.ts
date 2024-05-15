@@ -10,6 +10,7 @@ export const POST = async (req: Request) => {
 
     const body = await req.json(); // Extract data from the request body
     const { email, password } = body;
+    console.log(email);
 
     // Find the chef by email
     const chef = await Chef.findOne({ email });

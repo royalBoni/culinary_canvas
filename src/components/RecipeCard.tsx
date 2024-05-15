@@ -71,7 +71,7 @@ const RecipeCard = ({ recipe }: { recipe: recipeType }) => {
         <div className="flex justify-center items-center">
           <Image
             src={
-              recipe.recipe_image_url
+              recipe?.recipe_image_url && recipe?.recipe_image_url !== "NAN"
                 ? `${recipe.recipe_image_url}`
                 : "/noavatar.png"
             }

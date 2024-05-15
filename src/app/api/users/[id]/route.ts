@@ -1,25 +1,21 @@
 import { createFollow, removeFollow } from "@/server/follow";
 import { getUser } from "@/server/user";
-import { NextApiRequest } from "next";
 import { revalidatePath } from "next/cache";
+import { NextRequest } from "next/server";
 
 export const dynamic = "force-dynamic";
 
 export const GET = async (
-  req: NextApiRequest,
+  req: NextRequest,
   { params }: { params: { id: number } }
 ) => {
   try {
     const id = params.id;
-    const host = req.headers.host ?? "localhost:3000";
-    const baseUrl = `https://${host}`;
 
-    const fullUrl = new URL(req.url ?? "", baseUrl);
+    const query = req.nextUrl.searchParams;
 
-    const includeFollowers =
-      fullUrl.searchParams.get("includeFollowers") === "true";
-    const includeFollowing =
-      fullUrl.searchParams.get("includeFollowing") === "true";
+    const includeFollowers = query.get("includeFollowers") === "true";
+    const includeFollowing = query.get("includeFollowing") === "true";
 
     const user = await getUser(id, includeFollowers, includeFollowing);
 

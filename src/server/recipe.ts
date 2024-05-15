@@ -23,8 +23,8 @@ export const readRecipes = async () => {
 export const getRecipe = async (
   recipeId: number,
   includeChef: boolean = false,
-  includeComments: boolean = false,
-  includeLikes: boolean = false
+  includeLikes: boolean = false,
+  includeComments: boolean = false
 ) => {
   try {
     const recipeQuery = await db

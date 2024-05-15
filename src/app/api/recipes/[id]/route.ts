@@ -1,24 +1,21 @@
 import { insertRecipeSchema, NewRecipe } from "@/db/schema/recipe";
-import { addLike, createLike, removeLike } from "@/server/like";
+import { addLike, removeLike } from "@/server/like";
 import { deleteRecipe, getRecipe, updateRecipe } from "@/server/recipe";
-import { NextApiRequest } from "next";
 import { revalidatePath } from "next/cache";
+import { NextRequest } from "next/server";
 
 export const GET = async (
-  req: NextApiRequest,
+  req: NextRequest,
   { params }: { params: { id: number } }
 ) => {
   try {
     const id = params.id;
-    const host = req.headers.host ?? "localhost:3000";
-    const baseUrl = `https://${host}`;
 
-    const fullUrl = new URL(req.url ?? "", baseUrl);
+    const query = req.nextUrl.searchParams;
 
-    const includeChef = fullUrl.searchParams.get("includeChef") === "true";
-    const includeComments =
-      fullUrl.searchParams.get("includeComments") === "true";
-    const includeLikes = fullUrl.searchParams.get("includeLikes") === "true";
+    const includeChef = query.get("includeChef") === "true";
+    const includeLikes = query.get("includeLikes") === "true";
+    const includeComments = query.get("includeComments") === "true";
 
     const recipe = await getRecipe(
       id,

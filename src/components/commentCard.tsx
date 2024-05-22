@@ -1,17 +1,23 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { returnChef } from "./RecipeCard";
+import { useDataContext } from "@/app/store/data-context";
 import { commentType, chefType } from "@/app/schema/recipe";
 import { format } from "date-fns";
 import Image from "next/image";
 
 const CommentCard = ({ comment }: { comment: commentType }) => {
   const [poster, setPoster] = useState<chefType | null>(null);
+  const { chefs } = useDataContext();
+
+  const returnChef = (id: number | string) => {
+    const findChef = chefs?.find((chef) => Number(chef.id) === id);
+    return findChef as chefType;
+  };
 
   // Function to fetch the poster
-  const fetchPoster = async () => {
+  const fetchPoster = () => {
     // Return a promise chain using .then
-    const poster = returnChef(comment.user_id);
+    const poster = returnChef(comment?.user_id);
     setPoster(poster);
     /*  return returnChef(comment.user_id).then((posterr: chefType) => {
       // Once data is fetched, set the poster state
@@ -28,7 +34,11 @@ const CommentCard = ({ comment }: { comment: commentType }) => {
       <div className="flex justify-between">
         <div className="flex gap-6">
           <Image
-            src={"/noavatar.png"}
+            src={
+              poster?.profile_image_url
+                ? `${poster?.profile_image_url}`
+                : "/noavatar.png"
+            }
             alt=""
             width={60}
             height={40}
@@ -38,10 +48,10 @@ const CommentCard = ({ comment }: { comment: commentType }) => {
         </div>
 
         <div className="text-lg font-bold">
-          {format(new Date(comment.created_at), "MMMM dd, yyyy")}
+          {format(new Date(comment?.created_at), "MMMM dd, yyyy")}
         </div>
       </div>
-      <div>{comment.content}</div>
+      <div>{comment?.content}</div>
     </div>
   );
 };

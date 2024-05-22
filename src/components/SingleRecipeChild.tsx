@@ -9,9 +9,9 @@ import { Flame, AlarmClock, Heart, MessageCircleMore } from "lucide-react";
 import * as Accordion from "@radix-ui/react-accordion";
 import { AccordionTrigger, AccordionContent } from "@radix-ui/react-accordion";
 import CommentCard from "./commentCard";
-
 import { useAlertDialogContext } from "@/app/store/alertDialogContext";
 import { UseUserContext } from "@/app/store/userContext";
+import { useDataContext } from "@/app/store/data-context";
 import { UseOperationContext } from "@/app/store/operationsContext";
 import {
   returnNumberOfComments,
@@ -40,6 +40,8 @@ const SingleRecipeChild = ({
     setImageUrl(url);
   }, []);
 
+  const { likes } = useDataContext();
+
   const { openOrCloseAlertDialog } = useAlertDialogContext();
   const { user } = UseUserContext();
   const { specifyOperation } = UseOperationContext();
@@ -54,11 +56,23 @@ const SingleRecipeChild = ({
     }
   };
 
+  const returnNumberOfLikes = (recipe_id: number | string) => {
+    const findLikedRecipe = likes?.filter(
+      (like) => like.recipe_id === recipe_id
+    );
+    return findLikedRecipe?.length;
+  };
+
+  const returnNumberOfComments = (recipe_id: number | string) => {
+    const findCommentedRecipe = comments?.filter(
+      (comment) => comment.recipe_id === recipe_id
+    );
+
+    return findCommentedRecipe?.length;
+  };
+
   return (
     <div className="h-auto relative lg:w-3/4 w-full">
-      <div>
-        <Link href={"/recipies"}>View more from chef</Link>
-      </div>
       <div className="w-5/5 grid gap-10 h-auto lg:heights lg:flex">
         <div className="w-5/5 heights flex flex-col-reverse gap-5 lg:w-3/5 lg:flex-row">
           <div className="flex flex-row gap-2 heights overflow-y-auto bg-black w-3/3 lg:w-1/3 lg:flex-col ">
@@ -76,7 +90,11 @@ const SingleRecipeChild = ({
           </div>
           <div className="bg-black w-3/3 flex items-center justify-center lg:w-2/3">
             <Image
-              src={imageUrl}
+              src={
+                recipe?.recipe_image_url && recipe?.recipe_image_url !== "NAN"
+                  ? `${recipe?.recipe_image_url}`
+                  : "/noavatar.png"
+              }
               alt=""
               width={400}
               height={400}
@@ -85,11 +103,11 @@ const SingleRecipeChild = ({
           </div>
         </div>
         <div className="w-5/5 bg-black flex flex-col gap-5 p-5 info lg:h-auto lg:w-2/5 heights overflow-y-auto">
-          <h1 className="text-pink-500 font-bold text-3xl">{recipe.name}</h1>
+          <h1 className="text-pink-500 font-bold text-3xl">{recipe?.name}</h1>
           <div>
             <h1 className="text-pink-500 font-bold">INGREDIENTS:</h1>
             <div className="flex gap-3 flex-wrap">
-              {recipe.activeIngredient.split(",").map((ingredient) => (
+              {recipe?.activeIngredients?.split(",").map((ingredient) => (
                 <div key={ingredient} className="text-white italic">
                   {ingredient}
                 </div>
@@ -98,10 +116,10 @@ const SingleRecipeChild = ({
           </div>
           <div className="flex gap-3 text-white">
             <div className="flex gap-1">
-              <Flame className="text-red-500" /> {recipe.calories} calories
+              <Flame className="text-red-500" /> {recipe?.calories} calories
             </div>
             <div className="flex gap-1">
-              <AlarmClock className="text-indigo-500" /> {recipe.cookingTime}{" "}
+              <AlarmClock className="text-indigo-500" /> {recipe?.cookingTime}{" "}
               mins
             </div>
           </div>
@@ -109,11 +127,11 @@ const SingleRecipeChild = ({
           <div className="flex gap-5">
             <div className="text-red-500 flex gap-2 hover:text-gray-500 hover:cursor-pointer">
               <Heart onClick={() => !user && openOrCloseAlertDialog(true)} />{" "}
-              {returnNumberOfLikes(recipe.id)}
+              {returnNumberOfLikes(recipe?.id)}
             </div>
             <div className="text-indigo-500 flex gap-2 hover:text-gray-500 hover:cursor-pointer">
               <MessageCircleMore onClick={selectCommentOperation} />{" "}
-              {returnNumberOfComments(recipe.id)}
+              {returnNumberOfComments(recipe?.id)}
             </div>
           </div>
 
@@ -149,7 +167,9 @@ const SingleRecipeChild = ({
                 DESCRIPTION
               </AccordionTrigger>
               <AccordionContent className="bg-pink-500 text-white">
-                <div className="AccordionContentText">{recipe.description}</div>
+                <div className="AccordionContentText">
+                  {recipe?.description}
+                </div>
               </AccordionContent>
             </Accordion.Item>
 
@@ -158,7 +178,7 @@ const SingleRecipeChild = ({
                 BENIFITS
               </AccordionTrigger>
               <AccordionContent className="bg-pink-500 text-white">
-                <div className="AccordionContentText">{recipe.benefit}</div>
+                <div className="AccordionContentText">{recipe?.benefit}</div>
               </AccordionContent>
             </Accordion.Item>
 
@@ -167,7 +187,9 @@ const SingleRecipeChild = ({
                 PREPARATION
               </AccordionTrigger>
               <Accordion.Content className="bg-pink-500 text-white">
-                <div className="AccordionContentText">{recipe.preparation}</div>
+                <div className="AccordionContentText">
+                  {recipe?.preparation}
+                </div>
               </Accordion.Content>
             </Accordion.Item>
           </Accordion.Root>
@@ -178,8 +200,8 @@ const SingleRecipeChild = ({
           <div className="flex flex-col gap-4">
             <h1 className="text-pink-500 font-bold">COMMENTS:</h1>
             <div className="flex flex-col gap-5">
-              {comments.map((comment) => (
-                <CommentCard comment={comment} key={comment.id} />
+              {comments?.map((comment) => (
+                <CommentCard comment={comment} key={comment?.id} />
               ))}
             </div>
           </div>

@@ -7,22 +7,54 @@ import Link from "next/link";
 import { UseUserContext } from "@/app/store/userContext";
 import { UseOperationContext } from "@/app/store/operationsContext";
 import { useAlertDialogContext } from "@/app/store/alertDialogContext";
+import { useDataContext } from "@/app/store/data-context";
 import {
-  returnNumberOfComments,
-  returnNumberOfLikes,
-  getChef,
+  //getChef,
   checkRecipeLikeForUser,
 } from "@/lib/actions";
-
-export const returnChef = (id: number) => {
-  const chef = getChef(id);
-  return chef as chefType;
-};
+import { object } from "zod";
 
 const RecipeCard = ({ recipe }: { recipe: recipeType }) => {
   const { user } = UseUserContext();
   const { openOrCloseAlertDialog } = useAlertDialogContext();
   const { specifyOperation } = UseOperationContext();
+  const { chefs, recipes, likes, comments } = useDataContext();
+
+  const returnChef = (id: number | string) => {
+    const findChef = chefs?.find((chef) => Number(chef.id) === id);
+    return findChef as chefType;
+  };
+
+  const returnNumberOfLikes = (recipe_id: number | string) => {
+    const findLikedRecipe = likes?.filter(
+      (like) => like.recipe_id === recipe_id
+    );
+    return findLikedRecipe?.length;
+  };
+
+  const returnNumberOfComments = (recipe_id: number | string) => {
+    const findCommentedRecipe = comments?.filter(
+      (comment) => comment.recipe_id === recipe_id
+    );
+
+    return findCommentedRecipe?.length;
+  };
+
+  const checkRecipeLikeForUser = (
+    user_id: number | string,
+    recipe_id: number | string
+  ) => {
+    const findLikedRecipe = likes.find(
+      (like) =>
+        Number(like.liker_id) === Number(user_id) &&
+        recipe_id === Number(like.recipe_id)
+    );
+    if (findLikedRecipe) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
   const selectCommentOperation = () => {
     if (user) {
@@ -39,7 +71,9 @@ const RecipeCard = ({ recipe }: { recipe: recipeType }) => {
         <div className="flex justify-center items-center">
           <Image
             src={
-              "https://images.pexels.com/photos/434258/pexels-photo-434258.jpeg?cs=srgb&dl=pexels-pixabay-434258.jpg&fm=jpg&_gl=1*ngbhgn*_ga*NTEyNTc1MDMxLjE3MTQ2OTUwOTQ.*_ga_8JE65Q40S6*MTcxNDY5NTA5NC4xLjEuMTcxNDY5NTE5NC4wLjAuMA.."
+              recipe?.recipe_image_url && recipe?.recipe_image_url !== "NAN"
+                ? `${recipe.recipe_image_url}`
+                : "/noavatar.png"
             }
             alt=""
             width={300}
@@ -56,14 +90,14 @@ const RecipeCard = ({ recipe }: { recipe: recipeType }) => {
         <div className="flex justify-between items-center">
           <div className=" flex items-center gap-3">
             <Image
-              src={"/noavatar.png"}
+              src={`${returnChef(recipe?.chefId)?.profile_image_url}`}
               alt=""
               width={10}
               height={30}
               className="rounded-full w-12 h-12"
             />{" "}
             <span className="text-gray-500">
-              {returnChef(recipe.chefId).username}
+              {returnChef(recipe.chefId)?.username}
             </span>
           </div>
           <div>{recipe.countryOfOrigin.slice(0, 3).toUpperCase()}</div>

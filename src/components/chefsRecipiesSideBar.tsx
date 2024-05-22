@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import Popular_chef_card from "./popular_chefs_card";
-import Popular_recipe_card from "./popular_recipe-card";
+import PopularChefCard from "./PopularChefCard";
+import PopularRecipeCard from "./PopularRecipeCard";
 import { usePathname } from "next/navigation";
 import { useDataContext } from "@/app/store/data-context";
 
@@ -15,8 +15,8 @@ const ChefRecipiesSideBar = () => {
       <div className="p-5 rounded-lg text-white bg-black flex flex-col gap-3 h-auto w-100">
         <h2 className="font-bold text-pink-500 text-xl">Most popular Chefs</h2>
         <div className="flex flex-col gap-4">
-          {chefs.slice(0, 3).map((chef) => (
-            <Popular_chef_card chef={chef} key={chef.id} />
+          {chefs?.slice(0, 3).map((chef) => (
+            <PopularChefCard chef={chef} key={chef.id} />
           ))}
         </div>
       </div>
@@ -27,8 +27,8 @@ const ChefRecipiesSideBar = () => {
       >
         <h2 className="font-bold text-pink-500 text-xl">Trending Recipies</h2>
         <div className="flex flex-col gap-4">
-          {recipies.slice(7, 10).map((recipe) => (
-            <Popular_recipe_card recipe={recipe} key={recipe.id} />
+          {recipies?.map((recipe) => (
+            <PopularRecipeCard recipe={recipe} key={recipe.name} />
           ))}
         </div>
       </div>

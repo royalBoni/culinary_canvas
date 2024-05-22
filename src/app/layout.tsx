@@ -23,21 +23,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AlertDialogProvider>
-        <OperationProvider>
-          <UserProvider>
-            <DataProvider>
-              <Providers>
+      <Providers>
+        <AlertDialogProvider>
+          <OperationProvider>
+            <UserProvider>
+              <DataProvider>
                 <body className={inter.className}>
                   <Navbar />
                   <AlertDialogComponent />
                   {children}
                 </body>
-              </Providers>
-            </DataProvider>
-          </UserProvider>
-        </OperationProvider>
-      </AlertDialogProvider>
+              </DataProvider>
+            </UserProvider>
+          </OperationProvider>
+        </AlertDialogProvider>
+      </Providers>
     </html>
   );
 }

@@ -2,10 +2,13 @@
 //import type { Metadata } from "next";
 
 import { type PropsWithChildren } from "react";
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
 import ChefRecipesSidebar from "@/components/ChefRecipesSidebar";
 import ChefRecipesFilterNav from "@/components/navbar/ChefRecipesFilterNav";
+import { useQuery } from "@tanstack/react-query";
+import { useDataContext } from "../store/data-context";
 
 /* export const metadata: Metadata = {
   title: "Culinary Canvas",
@@ -14,6 +17,77 @@ import ChefRecipesFilterNav from "@/components/navbar/ChefRecipesFilterNav";
 
 const Layout = ({ children }: PropsWithChildren) => {
   const pathName = usePathname();
+  const { addChefs, addRecipes, addLikes, addComments, addFollows } =
+    useDataContext();
+
+  const {
+    data: recipeData,
+    error: recipeError,
+    isLoading: recipeIsLoading,
+  } = useQuery({
+    queryKey: ["recipeposts"],
+    queryFn: () =>
+      fetch("http://localhost:3000/api/recipe", { cache: "no-store" }).then(
+        (res) => res.json()
+      ),
+    refetchInterval: 4000,
+    retry: 5,
+  });
+
+  const {
+    data: chefData,
+    error: chefError,
+    isLoading: chefIsLoading,
+  } = useQuery({
+    queryKey: ["chefposts"],
+    queryFn: () =>
+      fetch("http://localhost:3000/api/chef").then((res) => res.json()),
+    refetchInterval: 4000,
+    retry: 5,
+  });
+
+  const {
+    data: likesData,
+    error: likesError,
+    isLoading: likesIsLoading,
+  } = useQuery({
+    queryKey: ["likesposts"],
+    queryFn: () =>
+      fetch("http://localhost:3000/api/likes").then((res) => res.json()),
+    refetchInterval: 4000,
+    retry: 5,
+  });
+
+  const {
+    data: commentData,
+    error: commentError,
+    isLoading: commentIsLoading,
+  } = useQuery({
+    queryKey: ["commentposts"],
+    queryFn: () =>
+      fetch("http://localhost:3000/api/comment").then((res) => res.json()),
+    refetchInterval: 4000,
+    retry: 5,
+  });
+
+  const {
+    data: followData,
+    error: followError,
+    isLoading: followIsLoading,
+  } = useQuery({
+    queryKey: ["followposts"],
+    queryFn: () =>
+      fetch("http://localhost:3000/api/follow").then((res) => res.json()),
+    refetchInterval: 4000,
+    retry: 5,
+  });
+
+  addRecipes(recipeData);
+  addChefs(chefData);
+  addLikes(likesData);
+  addComments(commentData);
+  addFollows(followData);
+
   return (
     <>
       {" "}

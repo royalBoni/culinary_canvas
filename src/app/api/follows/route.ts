@@ -1,10 +1,10 @@
-import { createLike, deleteLike, getLikes } from "@/server/like";
+import { createFollow, deleteFollow, getFollows } from "@/server/follow";
 import { revalidatePath } from "next/cache";
 
 export const GET = async () => {
   try {
-    const comments = await getLikes();
-    return Response.json(comments);
+    const follows = await getFollows();
+    return Response.json(follows);
   } catch (error) {
     console.log(error);
 
@@ -15,30 +15,30 @@ export const GET = async () => {
 export const POST = async (req: Request) => {
   try {
     const body = await req.json();
-
     const userId = body.userId;
-    const recipeId = body.recipeId;
-
+    const followerId = body.followerId;
     if (!userId) {
       return Response.json(
         { error: "Missing fields: userId" },
         { status: 400 }
       );
     }
-    if (!userId) {
+    if (!followerId) {
       return Response.json(
-        { error: "Missing fields: recipeId" },
+        { error: "Missing fields: followerId" },
         { status: 400 }
       );
     }
-    const result = await createLike(userId, recipeId);
+    const result = await createFollow(userId, followerId);
 
-    if (!result)
+    if (!result) {
       return Response.json(
-        { error: "Like operation failed." },
+        { error: "Follow operation failed or already exists." },
         { status: 409 }
       );
-    revalidatePath("api/recipes");
+    }
+    revalidatePath("/api/follows");
+    revalidatePath("/api/users");
     return Response.json(result, { status: 201 });
   } catch (error) {
     console.log(error);
@@ -49,19 +49,22 @@ export const POST = async (req: Request) => {
 export const DELETE = async (req: Request) => {
   try {
     const body = await req.json();
-    const likeId = body.likeId;
+    const followId = body.followId;
 
-    if (!likeId) {
+    if (!followId) {
       return Response.json(
-        { error: "Missing fields: likeId" },
+        { error: "Missing fields: followId" },
         { status: 400 }
       );
     }
-    const result = await deleteLike(likeId);
-    if (!result)
-      return Response.json({ error: "Recipe not found" }, { status: 404 });
-    revalidatePath("api/recipes/likes");
-    return Response.json(result);
+
+    const result = await deleteFollow(followId);
+    if (!result) {
+      return Response.json({ error: "Follow not found" }, { status: 404 });
+    }
+    revalidatePath("/api/follows");
+    revalidatePath("/api/users");
+    return Response.json({ message: "Follow removed successfully" });
   } catch (error) {
     console.log(error);
     return Response.json({ error: "Something went wrong" }, { status: 500 });

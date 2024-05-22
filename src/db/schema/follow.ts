@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { text, integer, sqliteTable, real } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, real } from "drizzle-orm/sqlite-core";
 import { users } from "./user";
 
 export const follows = sqliteTable("follows", {
@@ -7,18 +7,22 @@ export const follows = sqliteTable("follows", {
   follower_id: integer("follower_id")
     .references(() => users.id)
     .notNull(),
-  following_id: integer("following_id")
+  followee_id: integer("followee_id")
     .references(() => users.id)
     .notNull(),
 });
 
 export const followRelations = relations(follows, ({ one }) => ({
   follower: one(users, {
+    relationName: "followInitiator",
     fields: [follows.follower_id],
     references: [users.id],
   }),
-  following: one(users, {
-    fields: [follows.following_id],
+  followee: one(users, {
+    relationName: "followTarget",
+    fields: [follows.followee_id],
     references: [users.id],
   }),
 }));
+
+export type NewFollow = typeof follows.$inferInsert;

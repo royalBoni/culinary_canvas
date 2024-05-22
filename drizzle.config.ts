@@ -1,11 +1,12 @@
 import type { Config } from "drizzle-kit";
 
 export default {
-  schema: "./src/db/schema/*",
+  schema: "./src/db/schema/*.ts",
   driver: "turso",
+  dialect: "sqlite",
   dbCredentials: {
     url: process.env.DATABASE_URL!,
-    authToken: process.env.DATABASE_AUTH_TOKEN!,
+    authToken: process.env.DATABASE_AUTH_TOKEN,
   },
-  out: "./drizzle",
+  out: ".drizzle",
 } satisfies Config;

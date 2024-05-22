@@ -4,6 +4,8 @@ import { recipes } from "./recipe";
 import { comments } from "./comment";
 import { likes } from "./like";
 import { follows } from "./follow";
+import { z } from "zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const users = sqliteTable("users", {
   id: integer("id").primaryKey().notNull(),
@@ -21,6 +23,10 @@ export const userRelations = relations(users, ({ many }) => ({
   recipes: many(recipes),
   comments: many(comments),
   likes: many(likes),
-  followsAsFollower: many(follows),
-  followsAsFollowing: many(follows),
+  follower: many(follows, { relationName: "followTarget" }),
+  following: many(follows, { relationName: "followInitiator" }),
 }));
+
+export type NewUser = typeof users.$inferInsert;
+export const insertUserSchema = createInsertSchema(users);
+export const selectUserSchema = createSelectSchema(users);

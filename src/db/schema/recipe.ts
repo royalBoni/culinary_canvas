@@ -3,6 +3,7 @@ import { text, integer, sqliteTable } from "drizzle-orm/sqlite-core";
 import { users } from "./user";
 import { comments } from "./comment";
 import { likes } from "./like";
+import { createInsertSchema } from "drizzle-zod";
 
 export const recipes = sqliteTable("recipes", {
   id: integer("id").primaryKey().notNull(),
@@ -19,9 +20,6 @@ export const recipes = sqliteTable("recipes", {
     .references(() => users.id)
     .notNull(),
   image_url: text("image_url"),
-  ingredients: text("ingredients").notNull(),
-  instructions: text("instructions").notNull(),
-  prep_time: integer("prep_time").notNull(),
 });
 
 export const recipeRelations = relations(recipes, ({ one, many }) => ({
@@ -32,3 +30,6 @@ export const recipeRelations = relations(recipes, ({ one, many }) => ({
   comments: many(comments),
   likes: many(likes),
 }));
+
+export type NewRecipe = typeof recipes.$inferInsert;
+export const insertRecipeSchema = createInsertSchema(recipes);

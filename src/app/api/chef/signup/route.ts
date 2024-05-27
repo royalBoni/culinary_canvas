@@ -25,7 +25,7 @@ export const POST = async (req: Request) => {
     // Compare the provided password with the stored hashed password
     //const isMatch = await bcrypt.compare(password, chef.password_hash);
 
-    if (!password === chef.password_hash) {
+    if (!password === chef.password) {
       return NextResponse.json(
         { error: "Invalid email or password" },
         { status: 401 }

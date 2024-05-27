@@ -9,14 +9,14 @@ import { useQuery } from "@tanstack/react-query";
 import "./styles.css";
 
 export type SlugType = {
-  slug: number;
+  slug: number | string;
 };
 
 const SingleRecipe = ({ params }: { params: SlugType }) => {
   const { slug } = params;
   const { recipes, chefs, comments } = useDataContext();
 
-  const getRecipeById = (id: number | number) => {
+  const getRecipeById = (id: number | string) => {
     const findRecipe = recipes?.find(
       (recipe) => Number(recipe.id) === Number(id)
     );
@@ -24,16 +24,16 @@ const SingleRecipe = ({ params }: { params: SlugType }) => {
     return findRecipe as recipeType;
   };
 
-  const getProductComments = (id: number) => {
+  const getProductComments = (id: number | string) => {
     const findComments = comments?.filter(
-      (comment) => comment.recipe_id === Number(id)
+      (comment) => Number(comment.recipe_id) === Number(id)
     );
 
     return findComments;
   };
 
   const returnChef = (id: number | string) => {
-    const findChef = chefs?.find((chef) => Number(chef.id) === id);
+    const findChef = chefs?.find((chef) => Number(chef.id) === Number(id));
     return findChef as chefType;
   };
 

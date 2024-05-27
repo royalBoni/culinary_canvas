@@ -13,11 +13,7 @@ import { useAlertDialogContext } from "@/app/store/alertDialogContext";
 import { UseUserContext } from "@/app/store/userContext";
 import { useDataContext } from "@/app/store/data-context";
 import { UseOperationContext } from "@/app/store/operationsContext";
-import {
-  returnNumberOfComments,
-  returnNumberOfLikes,
-  checkRecipeLikeForUser,
-} from "@/lib/actions";
+import { useMutation } from "@tanstack/react-query";
 
 import PopularChefCard from "./PopularChefCard";
 
@@ -50,6 +46,65 @@ const SingleRecipeChild = ({
     if (user) {
       openOrCloseAlertDialog(true);
       specifyOperation("comment");
+    } else {
+      openOrCloseAlertDialog(true);
+      specifyOperation("create-account");
+    }
+  };
+
+  const checkRecipeLikeForUser = (
+    user_id: number | string,
+    recipe_id: number | string
+  ) => {
+    const findLikedRecipe = likes.find(
+      (like) =>
+        Number(like.liker_id) === Number(user_id) &&
+        Number(recipe_id) === Number(like.recipe_id)
+    );
+    if (findLikedRecipe) {
+      return findLikedRecipe;
+    } else {
+      return false;
+    }
+  };
+
+  const { mutate, reset } = useMutation({
+    mutationFn: (data: any) =>
+      fetch(data.action ? `/api/likes/${data.action.like_id}` : "/api/likes", {
+        // Using relative path to access API route
+        method: data.action ? "DELETE" : "POST",
+        body: JSON.stringify({
+          liker_id: data.liker_id,
+          recipe_id: data.recipe_id,
+        }),
+      }).then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to like recipe");
+        }
+        if (data.action) {
+          console.log("successfully unliked");
+        } else {
+          console.log("successfully liked");
+        }
+
+        reset();
+        return res.json();
+      }),
+    onSuccess: (data) => {
+      console.log("operation completed:", data);
+    },
+    onError: (error) => {
+      console.error("Mutation error:", error);
+    },
+  });
+
+  const selectLikeOperation = (recipe_id: number | string) => {
+    if (user) {
+      mutate({
+        liker_id: user.id,
+        recipe_id: recipe_id,
+        action: checkRecipeLikeForUser(user?.id, recipe.id),
+      });
     } else {
       openOrCloseAlertDialog(true);
       specifyOperation("create-account");
@@ -91,8 +146,8 @@ const SingleRecipeChild = ({
           <div className="bg-black w-3/3 flex items-center justify-center lg:w-2/3">
             <Image
               src={
-                recipe?.recipe_image_url && recipe?.recipe_image_url !== "NAN"
-                  ? `${recipe?.recipe_image_url}`
+                recipe?.img && recipe?.img !== null
+                  ? `${recipe?.img}`
                   : "/noavatar.png"
               }
               alt=""
@@ -139,6 +194,7 @@ const SingleRecipeChild = ({
           <div className="flex justify-between border-t-2 py-2 border-gray-500">
             <div className="text-gray-500 flex gap-2 hover:text-white">
               <Heart
+                onClick={() => selectLikeOperation(recipe.id)}
                 className={`${
                   user?.id
                     ? checkRecipeLikeForUser(user?.id, recipe.id)

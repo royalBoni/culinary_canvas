@@ -1,22 +1,79 @@
 import mongoose from "mongoose";
 import { zodSchema } from "@zodyac/zod-mongoose";
-import {
-  recipeSchema,
-  chefSchema,
-  likeSchema,
-  commentSchema,
-  followSchema,
-} from "@/app/schema/recipe";
+import //recipeSchema,
+//chefSchema,
+//likeSchema,
+//commentSchema,
+//followSchema,
+"@/app/schema/recipe";
 import { model } from "mongoose";
 
 //Convert the Zod schema to a Mongoose schema
-const recipeMongooseSchema = zodSchema(recipeSchema);
-const chefMongooseSchema = zodSchema(chefSchema);
-const likeMongooseSchema = zodSchema(likeSchema);
-const commentMongooseSchema = zodSchema(commentSchema);
-const followMongooseSchema = zodSchema(followSchema);
+//const recipeMongooseSchema = zodSchema(recipeSchema);
+//const chefMongooseSchema = zodSchema(chefSchema);
+//const likeMongooseSchema = zodSchema(likeSchema);
+//const commentMongooseSchema = zodSchema(commentSchema);
+//const followMongooseSchema = zodSchema(followSchema);
 
-const userSchema = new mongoose.Schema(
+const followSchema = new mongoose.Schema({
+  follow_id: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  fan_id: {
+    type: String,
+    required: true,
+  },
+  chef_id: {
+    type: String,
+    required: true,
+  },
+});
+
+const commentSchema = new mongoose.Schema(
+  {
+    id: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    recipe_id: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    user_id: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    content: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+  },
+  { timestamps: true }
+);
+
+const likeSchema = new mongoose.Schema({
+  like_id: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  recipe_id: {
+    type: String,
+    required: true,
+  },
+  liker_id: {
+    type: String,
+    required: true,
+  },
+});
+
+const chefSchema = new mongoose.Schema(
   {
     username: {
       type: String,
@@ -25,6 +82,13 @@ const userSchema = new mongoose.Schema(
       minlength: 3,
       maxlength: 20,
     },
+
+    id: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+
     email: {
       type: String,
       required: true,
@@ -34,12 +98,17 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-      minlength: 6,
     },
     img: {
       type: String,
     },
-    isAdmin: {
+    bio: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
+    isLoggedIn: {
       type: Boolean,
       default: false,
     },
@@ -47,9 +116,9 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const postSchema = new mongoose.Schema(
+const recipeSchema = new mongoose.Schema(
   {
-    title: {
+    name: {
       type: String,
       required: true,
     },
@@ -57,15 +126,39 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    preparation: {
+      type: String,
+    },
+    activeIngredients: {
+      type: String,
+    },
+    category: {
+      type: String,
+    },
+    countryOfOrigin: {
+      type: String,
+    },
+    calories: {
+      type: String,
+    },
+
+    benefit: {
+      type: String,
+    },
+    cookingTIme: {
+      type: String,
+    },
+    chefId: {
+      type: String,
+    },
     img: {
       type: String,
     },
     userId: {
       type: String,
-      ref: "User",
       required: true,
     },
-    slug: {
+    id: {
       type: String,
       required: true,
       unique: true,
@@ -76,16 +169,14 @@ const postSchema = new mongoose.Schema(
 
 // Create a Mongoose model
 export const Recipe =
-  mongoose.models.Recipe || mongoose.model("Recipe", recipeMongooseSchema);
+  mongoose.models.Recipe || mongoose.model("Recipe", recipeSchema);
 
-export const Chef =
-  mongoose.models.Chef || mongoose.model("Chef", chefMongooseSchema);
+export const Chef = mongoose.models.Chef || mongoose.model("Chef", chefSchema);
 
-export const Like =
-  mongoose.models.Like || mongoose.model("Like", likeMongooseSchema);
+export const Like = mongoose.models.Like || mongoose.model("Like", likeSchema);
 
 export const Comment =
-  mongoose.models.Comment || mongoose.model("Comment", commentMongooseSchema);
+  mongoose.models.Comment || mongoose.model("Comment", commentSchema);
 
 export const Follow =
-  mongoose.models.Follow || mongoose.model("Follow", followMongooseSchema);
+  mongoose.models.Follow || mongoose.model("Follow", followSchema);

@@ -8,6 +8,7 @@ import { AlertDialogProvider } from "./store/alertDialogContext";
 import AlertDialogComponent from "@/components/alertDialog";
 import { Providers } from "./providers";
 import { OperationProvider } from "./store/operationsContext";
+import { RecipeProvider } from "./store/selectedRecipeContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,19 +25,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Providers>
-        <AlertDialogProvider>
-          <OperationProvider>
-            <UserProvider>
-              <DataProvider>
-                <body className={inter.className}>
-                  <Navbar />
-                  <AlertDialogComponent />
-                  {children}
-                </body>
-              </DataProvider>
-            </UserProvider>
-          </OperationProvider>
-        </AlertDialogProvider>
+        <RecipeProvider>
+          <AlertDialogProvider>
+            <OperationProvider>
+              <UserProvider>
+                <DataProvider>
+                  <body className={inter.className}>
+                    <Navbar />
+                    <AlertDialogComponent />
+                    {children}
+                  </body>
+                </DataProvider>
+              </UserProvider>
+            </OperationProvider>
+          </AlertDialogProvider>
+        </RecipeProvider>
       </Providers>
     </html>
   );

@@ -1,13 +1,15 @@
 import React from "react";
 import Image from "next/image";
 import { Heart, MessageCircleMore } from "lucide-react";
-import { chefType, recipeType } from "@/app/schema/recipe";
+import { chefType, likeType, recipeType } from "@/app/schema/recipe";
 import { Button } from "./Button";
 import Link from "next/link";
 import { UseUserContext } from "@/app/store/userContext";
 import { UseOperationContext } from "@/app/store/operationsContext";
 import { useAlertDialogContext } from "@/app/store/alertDialogContext";
 import { useDataContext } from "@/app/store/data-context";
+import { UseRecipeContext } from "@/app/store/selectedRecipeContext";
+import { useMutation } from "@tanstack/react-query";
 import {
   //getChef,
   checkRecipeLikeForUser,
@@ -19,9 +21,10 @@ const RecipeCard = ({ recipe }: { recipe: recipeType }) => {
   const { openOrCloseAlertDialog } = useAlertDialogContext();
   const { specifyOperation } = UseOperationContext();
   const { chefs, recipes, likes, comments } = useDataContext();
+  const { selectRecipe } = UseRecipeContext();
 
   const returnChef = (id: number | string) => {
-    const findChef = chefs?.find((chef) => Number(chef.id) === id);
+    const findChef = chefs?.find((chef) => Number(chef.id) === Number(id));
     return findChef as chefType;
   };
 
@@ -47,19 +50,63 @@ const RecipeCard = ({ recipe }: { recipe: recipeType }) => {
     const findLikedRecipe = likes.find(
       (like) =>
         Number(like.liker_id) === Number(user_id) &&
-        recipe_id === Number(like.recipe_id)
+        Number(recipe_id) === Number(like.recipe_id)
     );
     if (findLikedRecipe) {
-      return true;
+      return findLikedRecipe;
     } else {
       return false;
     }
   };
 
-  const selectCommentOperation = () => {
+  const { mutate, reset } = useMutation({
+    mutationFn: (data: any) =>
+      fetch(data.action ? `/api/likes/${data.action.like_id}` : "/api/likes", {
+        // Using relative path to access API route
+        method: data.action ? "DELETE" : "POST",
+        body: JSON.stringify({
+          liker_id: data.liker_id,
+          recipe_id: data.recipe_id,
+        }),
+      }).then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to like recipe");
+        }
+        if (data.action) {
+          console.log("successfully unliked");
+        } else {
+          console.log("successfully liked");
+        }
+
+        reset();
+        return res.json();
+      }),
+    onSuccess: (data) => {
+      console.log("operation completed:", data);
+    },
+    onError: (error) => {
+      console.error("Mutation error:", error);
+    },
+  });
+
+  const selectLikeOperation = (recipe_id: number | string) => {
+    if (user) {
+      mutate({
+        liker_id: user.id,
+        recipe_id: recipe_id,
+        action: checkRecipeLikeForUser(user?.id, recipe.id),
+      });
+    } else {
+      openOrCloseAlertDialog(true);
+      specifyOperation("create-account");
+    }
+  };
+
+  const selectCommentOperation = (recipe: recipeType) => {
     if (user) {
       openOrCloseAlertDialog(true);
       specifyOperation("comment");
+      selectRecipe(recipe);
     } else {
       openOrCloseAlertDialog(true);
       specifyOperation("create-account");
@@ -71,8 +118,8 @@ const RecipeCard = ({ recipe }: { recipe: recipeType }) => {
         <div className="flex justify-center items-center">
           <Image
             src={
-              recipe?.recipe_image_url && recipe?.recipe_image_url !== "NAN"
-                ? `${recipe.recipe_image_url}`
+              (recipe?.img && recipe?.img !== null) || recipe?.img !== undefined
+                ? `${recipe.img}`
                 : "/noavatar.png"
             }
             alt=""
@@ -84,13 +131,17 @@ const RecipeCard = ({ recipe }: { recipe: recipeType }) => {
         <h2 className="font-bold text-pink-500">{recipe.name}</h2>
 
         {/* DESCRIPTION */}
-        <div>{recipe.description.slice(1, 100)}...</div>
+        <div>{recipe.description.slice(0, 100)}...</div>
 
         {/* CHEF */}
         <div className="flex justify-between items-center">
           <div className=" flex items-center gap-3">
-            <Image
-              src={`${returnChef(recipe?.chefId)?.profile_image_url}`}
+            <img
+              src={
+                returnChef(recipe?.chefId)?.img
+                  ? `${returnChef(recipe?.chefId)?.img}`
+                  : "/noavatar.png"
+              }
               alt=""
               width={10}
               height={30}
@@ -118,6 +169,7 @@ const RecipeCard = ({ recipe }: { recipe: recipeType }) => {
         <div className="flex justify-between border-t-2 py-2 border-gray-500">
           <div className="text-gray-500 flex gap-2 hover:text-white">
             <Heart
+              onClick={() => selectLikeOperation(recipe.id)}
               className={`${
                 user?.id
                   ? checkRecipeLikeForUser(user?.id, recipe.id)
@@ -130,7 +182,7 @@ const RecipeCard = ({ recipe }: { recipe: recipeType }) => {
           </div>
           <div
             className="text-gray-500 flex gap-2 hover:text-white"
-            onClick={selectCommentOperation}
+            onClick={() => selectCommentOperation(recipe)}
           >
             <MessageCircleMore /> Comment
           </div>

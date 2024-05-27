@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 
 const connection = { isConnected: false };
 
+export const cloudinary = require("cloudinary").v2;
+
 export const connectToDb = async () => {
   try {
     if (connection.isConnected) {
@@ -17,3 +19,9 @@ export const connectToDb = async () => {
     throw new Error("There is a new error");
   }
 };
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});

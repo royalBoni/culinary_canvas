@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 const PopularChefCard = ({ chef }: { chef: chefType }) => {
   const router = useRouter();
 
-  const visitChefPage = (id: number) => {
+  const visitChefPage = (id: number | string) => {
     router.push(`/chefs/${id}`);
   };
   return (
@@ -22,11 +22,7 @@ const PopularChefCard = ({ chef }: { chef: chefType }) => {
         <div className="flex gap-5">
           {" "}
           <Image
-            src={
-              chef?.profile_image_url
-                ? `${chef?.profile_image_url}`
-                : "/noavatar.png"
-            }
+            src={chef?.img ? `${chef?.img}` : "/noavatar.png"}
             alt=""
             width={60}
             height={40}

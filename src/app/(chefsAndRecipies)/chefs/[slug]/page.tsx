@@ -15,7 +15,7 @@ const ChefProfilePage = ({ params }: { params: SlugType }) => {
   const { recipes, chefs } = useDataContext();
 
   const getChef = (id: number) => {
-    const findChef = chefs?.find((chef) => chef.id === Number(id));
+    const findChef = chefs?.find((chef) => Number(chef.id) === Number(id));
 
     return findChef as chefType;
   };
@@ -24,7 +24,7 @@ const ChefProfilePage = ({ params }: { params: SlugType }) => {
 
   const getChefPostedCategories = (id: number) => {
     const allCategoriesRecipies = recipes?.filter(
-      (recipe) => recipe.chefId === Number(id)
+      (recipe) => Number(recipe.chefId) === Number(id)
     );
     // Create an object to store categories and their counts for each chef
 

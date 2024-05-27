@@ -9,17 +9,56 @@ import {
   returnLoggedInUserFollowingChef,
 } from "@/lib/actions";
 import { Button } from "./Button";
+import { useMutation } from "@tanstack/react-query";
 import { UseUserContext } from "@/app/store/userContext";
 import { useDataContext } from "@/app/store/data-context";
+import { UseOperationContext } from "@/app/store/operationsContext";
+import AlertDialogComponent from "./alertDialog";
+import { useAlertDialogContext } from "@/app/store/alertDialogContext";
 
 const ChefListCard = ({ chef }: { chef: chefType }) => {
   const router = useRouter();
   const { user } = UseUserContext();
   const { follows } = useDataContext();
+  const { specifyOperation } = UseOperationContext();
+  const { openOrCloseAlertDialog } = useAlertDialogContext();
 
-  const visitChefPage = (id: number) => {
+  const visitChefPage = (id: number | string) => {
     router.push(`/chefs/${id}`);
   };
+
+  const { mutate, reset } = useMutation({
+    mutationFn: (data: any) =>
+      fetch(
+        data.action ? `/api/follow/${data.action.follow_id}` : "/api/follow",
+        {
+          // Using relative path to access API route
+          method: data.action ? "DELETE" : "POST",
+          body: JSON.stringify({
+            fan_id: data.fan_id,
+            chef_id: data.chef_id,
+          }),
+        }
+      ).then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to follow chef");
+        }
+        if (data.action) {
+          console.log("successfully unfollowed");
+        } else {
+          console.log("successfully followed");
+        }
+
+        reset();
+        return res.json();
+      }),
+    onSuccess: (data) => {
+      console.log("operation completed:", data);
+    },
+    onError: (error) => {
+      console.error("Mutation error:", error);
+    },
+  });
 
   const returnChefFollowers = (user_id: number | string) => {
     const chefFollowers = follows?.filter(
@@ -34,6 +73,35 @@ const ChefListCard = ({ chef }: { chef: chefType }) => {
     );
     return chefFollowing;
   };
+
+  const returnLoggedInUserFollowingChef = (
+    user_id: number | string,
+    chef_id: number | string
+  ) => {
+    const chefFollowing = follows?.find(
+      (follow) =>
+        Number(follow?.fan_id) === Number(user_id) &&
+        Number(follow?.chef_id) === Number(chef_id)
+    );
+    if (chefFollowing) {
+      return chefFollowing;
+    } else {
+      return false;
+    }
+  };
+
+  const selectFollowOperation = (chef_id: string | number) => {
+    if (user) {
+      mutate({
+        fan_id: user.id,
+        chef_id: chef_id,
+        action: returnLoggedInUserFollowingChef(user?.id, chef_id),
+      });
+    } else {
+      openOrCloseAlertDialog(true);
+      specifyOperation("create-account");
+    }
+  };
   return (
     <div
       key={chef.id}
@@ -47,8 +115,8 @@ const ChefListCard = ({ chef }: { chef: chefType }) => {
         <div className="h-4/5 absolute m-auto left-0 right-0 top-0 bottom-0 w-3/5">
           <Image
             src={
-              chef?.profile_image_url && chef?.profile_image_url !== "NAN"
-                ? `${chef?.profile_image_url}`
+              (chef?.img && chef?.img !== null) || chef?.img !== undefined
+                ? `${chef?.img}`
                 : "/noavatar.png"
             }
             alt="noavatar"
@@ -77,7 +145,7 @@ const ChefListCard = ({ chef }: { chef: chefType }) => {
           </div>
         </div>
 
-        <Button>
+        <Button onClick={() => selectFollowOperation(chef.id)}>
           {user
             ? returnLoggedInUserFollowingChef(user?.id, chef?.id)
               ? "Following"

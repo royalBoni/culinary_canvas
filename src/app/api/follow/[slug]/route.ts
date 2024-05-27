@@ -1,7 +1,7 @@
 "use server";
 import { NextResponse } from "next/server";
 import { connectToDb } from "@/lib/utils";
-import { Like } from "@/lib/model";
+import { Follow } from "@/lib/model";
 import { recipeType } from "@/app/schema/recipe";
 import { SlugType } from "@/app/(chefsAndRecipies)/recipies/[slug]/page";
 
@@ -9,7 +9,7 @@ export const GET = async (req: Request, { params }: { params: SlugType }) => {
   const { slug } = params;
   try {
     connectToDb();
-    const chef: recipeType[] = await Like.find({ slug });
+    const chef: recipeType[] = await Follow.find({ slug });
     return NextResponse.json(chef);
   } catch (err) {
     console.log(err);
@@ -25,10 +25,10 @@ export const DELETE = async (
 
   try {
     connectToDb();
-    await Like.deleteOne({ like_id: slug });
-    return NextResponse.json("Like Deleted");
+    await Follow.deleteOne({ follow_id: slug });
+    return NextResponse.json("Chef unfollowed");
   } catch (err) {
     console.log(err);
-    throw new Error("Failed to delete like");
+    throw new Error("Failed to unfollow chef");
   }
 };

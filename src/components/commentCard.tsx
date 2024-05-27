@@ -10,7 +10,7 @@ const CommentCard = ({ comment }: { comment: commentType }) => {
   const { chefs } = useDataContext();
 
   const returnChef = (id: number | string) => {
-    const findChef = chefs?.find((chef) => Number(chef.id) === id);
+    const findChef = chefs?.find((chef) => Number(chef.id) === Number(id));
     return findChef as chefType;
   };
 
@@ -35,8 +35,8 @@ const CommentCard = ({ comment }: { comment: commentType }) => {
         <div className="flex gap-6">
           <Image
             src={
-              poster?.profile_image_url
-                ? `${poster?.profile_image_url}`
+              returnChef(comment?.user_id).img
+                ? `${returnChef(comment?.user_id).img}`
                 : "/noavatar.png"
             }
             alt=""
@@ -44,11 +44,14 @@ const CommentCard = ({ comment }: { comment: commentType }) => {
             height={40}
             className="rounded-full w-12 h-12"
           />
-          <div className="text-xl font-bold">{poster?.username}</div>
+          <div className="text-xl font-bold">
+            {returnChef(comment?.user_id)?.username}
+          </div>
         </div>
 
         <div className="text-lg font-bold">
-          {format(new Date(comment?.created_at), "MMMM dd, yyyy")}
+          {comment.timeStamp &&
+            format(new Date(comment?.timeStamp), "MMMM dd, yyyy")}
         </div>
       </div>
       <div>{comment?.content}</div>

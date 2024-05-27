@@ -10,9 +10,7 @@ import { SlugType } from "@/app/(chefsAndRecipies)/recipies/[slug]/page";
 import { UseOperationContext } from "@/app/store/operationsContext";
 import { useAlertDialogContext } from "@/app/store/alertDialogContext";
 import { useDataContext } from "@/app/store/data-context";
-import { returnChefFollowers, returnChefFollowing } from "@/lib/actions";
-import { getAllChefs } from "@/lib/actions";
-import { returnLoggedInUserFollowingChef } from "@/lib/actions";
+import { useMutation } from "@tanstack/react-query";
 import ChefListCard from "./ChefListCard";
 
 type RecipiesAndCategoryType = {
@@ -47,6 +45,7 @@ const ChefChildPage = ({
   };
 
   const selectOperation = (operation: string) => {
+    console.log(operation);
     openOrCloseAlertDialog(true);
     specifyOperation(operation);
   };
@@ -75,9 +74,55 @@ const ChefChildPage = ({
         Number(follow.chef_id) === Number(chef_id)
     );
     if (chefFollowing) {
-      return true;
+      return chefFollowing;
     } else {
       return false;
+    }
+  };
+
+  const { mutate, reset } = useMutation({
+    mutationFn: (data: any) =>
+      fetch(
+        data.action ? `/api/follow/${data.action.follow_id}` : "/api/follow",
+        {
+          // Using relative path to access API route
+          method: data.action ? "DELETE" : "POST",
+          body: JSON.stringify({
+            fan_id: data.fan_id,
+            chef_id: data.chef_id,
+          }),
+        }
+      ).then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to follow chef");
+        }
+        if (data.action) {
+          console.log("successfully unfollowed");
+        } else {
+          console.log("successfully followed");
+        }
+
+        reset();
+        return res.json();
+      }),
+    onSuccess: (data) => {
+      console.log("operation completed:", data);
+    },
+    onError: (error) => {
+      console.error("Mutation error:", error);
+    },
+  });
+
+  const selectFollowOperation = (chef_id: string | number) => {
+    if (user) {
+      mutate({
+        fan_id: user.id,
+        chef_id: chef_id,
+        action: returnLoggedInUserFollowingChef(user?.id, chef_id),
+      });
+    } else {
+      openOrCloseAlertDialog(true);
+      specifyOperation("create-account");
     }
   };
 
@@ -86,9 +131,7 @@ const ChefChildPage = ({
       <div className="bg-[url('/noavatar.png')] backgroungImage max-w-full relative min-h-80">
         <Image
           src={
-            chef?.profile_image_url && chef?.profile_image_url !== "NAN"
-              ? `${chef?.profile_image_url}`
-              : "/noavatar.png"
+            chef?.img && chef?.img !== null ? `${chef?.img}` : "/noavatar.png"
           }
           alt="chefs profile image"
           width={300}
@@ -108,13 +151,13 @@ const ChefChildPage = ({
             </div>
           </div>
 
-          {user?.id === Number(params.slug) ? (
+          {Number(user?.id) === Number(params.slug) ? (
             <Button>
               <UserCog onClick={() => selectOperation("edit-profile")} /> Edit
               Profile
             </Button>
           ) : (
-            <Button>
+            <Button onClick={() => selectFollowOperation(chef.id)}>
               {user
                 ? returnLoggedInUserFollowingChef(user?.id, chef?.id)
                   ? "Following"

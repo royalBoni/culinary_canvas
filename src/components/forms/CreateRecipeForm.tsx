@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, ChangeEvent } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { FormTextField } from "../form-fields";
 import { recipeType } from "@/app/schema/recipe";
-import { UseUserContext } from "@/app/store/userContext";
 import { Button } from "../Button";
 import { Select } from "../form-fields/Select";
 import { ImagePlus, X } from "lucide-react";
 import { FormTextArea } from "../form-fields/TextArea";
 import { useAlertDialogContext } from "@/app/store/alertDialogContext";
+import { UseUserContext } from "@/app/store/userContext";
 import Image from "next/image";
 
 type CategoriesAndCountriesType = string[];
@@ -30,27 +30,22 @@ const allCountriesOfOrigin: CategoriesAndCountriesType = [
   "Ghana",
 ];
 
-const CreateRecipeForm = () => {
+const CreateRecipeForm: React.FC = () => {
   const { user } = UseUserContext();
   const { openOrCloseAlertDialog } = useAlertDialogContext();
   const methods = useForm();
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [addImageSection, setAddImageSection] = useState<boolean>(false);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files) return;
-
-    const previews: string[] = [];
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
       const reader = new FileReader();
       reader.onload = () => {
         if (typeof reader.result === "string") {
-          previews.push(reader.result);
-          if (previews.length === files.length) {
-            setImagePreviews(previews);
-          }
+          setImagePreview(reader.result);
         }
       };
       reader.readAsDataURL(file);
@@ -64,18 +59,52 @@ const CreateRecipeForm = () => {
     }
   };
 
-  const deleteSelectImage = (image: string) => {
-    const imagesToRemove = imagePreviews.filter(
-      (searchedImage) => searchedImage !== image
-    );
-    setImagePreviews(imagesToRemove);
+  const deleteSelectedImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
   };
 
   const onSubmitNewGift = (data: recipeType) => {
-    console.log("this is the data");
-    console.log(data);
-    // Now you can send both the form data and the image files to the server
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("calories", data.calories.toString());
+    formData.append("cookingTime", data.cookingTime.toString());
+    formData.append("category", data.category);
+    formData.append("country", data.countryOfOrigin);
+    formData.append("description", data.description);
+    formData.append("ingredients", data.activeIngredients);
+    formData.append("benefit", data.benefit);
+    formData.append("preparation", data.preparation);
+    formData.append("userId", user?.id || "");
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
+
+    mutate(formData);
   };
+
+  const { mutate, reset } = useMutation({
+    mutationFn: (formData: FormData) =>
+      fetch("http://localhost:3000/api/recipe/", {
+        method: "POST",
+        body: formData,
+      }).then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to create recipe. Please check your inputs");
+        }
+        console.log("successfully created");
+        reset();
+        return res.json();
+      }),
+    onSuccess: (data) => {
+      // Handle successful login (e.g., save user data to context, redirect, etc.)
+      console.log("Successfully logged in:", data);
+      openOrCloseAlertDialog(false);
+    },
+    onError: (error) => {
+      console.error("Mutation error:", error);
+    },
+  });
 
   return (
     <FormProvider {...methods}>
@@ -97,7 +126,7 @@ const CreateRecipeForm = () => {
             type="number"
           />
           <FormTextField
-            name="cooking-time"
+            name="cookingTime"
             label="Cooking Time"
             type="number"
           />
@@ -109,18 +138,21 @@ const CreateRecipeForm = () => {
           />
           <FormTextArea name="description" label="Description" />
           <FormTextArea name="ingredients" label="Active Ingredients" />
+          <FormTextArea name="benefit" label="Benefit" />
+          <FormTextArea name="preparation" label="Preparation" />
+
           {/* Input field for uploading images */}
           {addImageSection && (
             <>
               <div>
-                <label htmlFor="images">Images:</label>
-                {imagePreviews.length === 0 && (
+                <label htmlFor="images">Image:</label>
+                {!imagePreview && (
                   <>
                     <div
                       className="bg-gray-500 w-full h-36 flex flex-col justify-center items-center cursor-pointer"
                       onClick={handleIconClick} // Call handleIconClick function when icon is clicked
                     >
-                      Click to Add Images
+                      Click to Add Image
                       <ImagePlus size={50} /> {/* Folder icon */}
                     </div>
                     <input
@@ -129,45 +161,36 @@ const CreateRecipeForm = () => {
                       id="images"
                       type="file"
                       accept="image/*"
-                      multiple // Allows multiple image selection
                       onChange={handleImageChange} // Handle image selection
                       ref={(e) => {
-                        if (e) methods.register("images", { value: e });
+                        if (e) methods.register("image", { value: e });
                       }}
                     />
                   </>
                 )}
               </div>
-              {/* Display image previews */}
-              <div className="flex gap-2 flex-wrap">
-                {imagePreviews.map((preview, index) => (
-                  <div className="relative w-72">
-                    <Button className="absolute bg-pink-500 p-1 rounded-full text-white right-1 top-1 hover:bg-gray-500">
-                      <X onClick={() => deleteSelectImage(preview)} />
-                    </Button>
-                    <Image
-                      key={index}
-                      src={preview}
-                      alt={`Preview ${index}`}
-                      /* style={{ width: "300px", height: "auto", margin: "5px" }} */
-                      className="w-72"
-                      width={50}
-                      height={50}
-                    />
-                  </div>
-                ))}
-              </div>
+              {/* Display image preview */}
+              {imagePreview && (
+                <div className="relative w-72">
+                  <Button className="absolute bg-pink-500 p-1 rounded-full text-white right-1 top-1 hover:bg-gray-500">
+                    <X onClick={deleteSelectedImage} />
+                  </Button>
+                  <Image
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-72"
+                    width={50}
+                    height={50}
+                  />
+                </div>
+              )}
             </>
           )}
 
           <div className="border-2 border-gray-500 rounded-xl p-5 flex justify-between items-center">
             <span className="font-bold text-lg">Add to your recipe</span>
             <div className="bg-gray-500 p-4 rounded-full hover:bg-gray-300">
-              {" "}
-              <ImagePlus
-                className=""
-                onClick={() => setAddImageSection(true)}
-              />
+              <ImagePlus onClick={() => setAddImageSection(true)} />
             </div>
           </div>
           <Button type="submit">Submit</Button>

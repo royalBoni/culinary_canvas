@@ -11,6 +11,7 @@ import { Select } from "../form-fields/Select";
 import { ImagePlus, X } from "lucide-react";
 import { FormTextArea } from "../form-fields/TextArea";
 import { useAlertDialogContext } from "@/app/store/alertDialogContext";
+import { UseRecipeContext } from "@/app/store/selectedRecipeContext";
 import Image from "next/image";
 
 type CategoriesAndCountriesType = string[];
@@ -29,11 +30,44 @@ const CommentForm = () => {
 
   const methods = useForm();
 
+  const { selrecipe } = UseRecipeContext();
+
   const onSubmitNewGift = (data: commentType) => {
     console.log(`${user?.username} is making this comment`);
     console.log(data);
+    mutate(data);
     // Now you can send both the form data and the image files to the server
   };
+
+  const { mutate, reset } = useMutation({
+    mutationFn: (newComment: commentType) =>
+      fetch("/api/comment", {
+        // Using relative path to access API route
+        method: "POST",
+        body: JSON.stringify({
+          user_id: user?.id,
+          content: newComment.content,
+          recipe_id: selrecipe?.id,
+        }),
+      }).then((res) => {
+        if (!res.ok) {
+          throw new Error(
+            "Failed to comment on recipe. Please check your inputs"
+          );
+        }
+        console.log("comment successfully created");
+        reset();
+        return res.json();
+      }),
+    onSuccess: (data) => {
+      // Handle successful login (e.g., save user data to context, redirect, etc.)
+      console.log("comment added:", data);
+      openOrCloseAlertDialog(false);
+    },
+    onError: (error) => {
+      console.error("Mutation error:", error);
+    },
+  });
 
   return (
     <FormProvider {...methods}>
@@ -48,7 +82,7 @@ const CommentForm = () => {
           className="flex flex-col gap-5"
           onSubmit={methods.handleSubmit(onSubmitNewGift)}
         >
-          <FormTextArea name="comment" label="Comment" />
+          <FormTextArea name="content" label="Comment" />
 
           <Button type="submit">Submit</Button>
         </form>

@@ -7,7 +7,6 @@ import Image from "next/image";
 import { UseUserContext } from "@/app/store/userContext";
 import { useAlertDialogContext } from "@/app/store/alertDialogContext";
 import { UseOperationContext } from "@/app/store/operationsContext";
-import { useRouter } from "next/navigation";
 import { User, Cross, CrossIcon, Plus } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/Button";
@@ -25,7 +24,7 @@ const links: linkType[] = [
 const Links = () => {
   const [open, setOpen] = useState(false);
 
-  const { user } = UseUserContext();
+  const { user, loggedInUser } = UseUserContext();
 
   const { openOrCloseAlertDialog } = useAlertDialogContext();
   const { specifyOperation } = UseOperationContext();
@@ -33,6 +32,10 @@ const Links = () => {
   const selectOperation = (operation: string) => {
     openOrCloseAlertDialog(true);
     specifyOperation(operation);
+  };
+
+  const logout = () => {
+    loggedInUser(undefined);
   };
 
   return (
@@ -58,7 +61,7 @@ const Links = () => {
             <Button onClick={() => selectOperation("create-recipe")}>
               <Plus />
             </Button>
-            <Button>Log out</Button>
+            <Button onClick={logout}>Log out</Button>
           </>
         )}
       </div>

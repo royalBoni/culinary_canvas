@@ -3,16 +3,14 @@
 import React, { useState, useEffect } from "react";
 import { FormProvider, useForm, SubmitHandler } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { FormTextField } from "../form-fields";
 import { commentType, recipeType } from "@/app/schema/recipe";
 import { UseUserContext } from "@/app/store/userContext";
 import { Button } from "../Button";
-import { Select } from "../form-fields/Select";
 import { ImagePlus, X } from "lucide-react";
 import { FormTextArea } from "../form-fields/TextArea";
 import { useAlertDialogContext } from "@/app/store/alertDialogContext";
 import { UseRecipeContext } from "@/app/store/selectedRecipeContext";
-import Image from "next/image";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 type CategoriesAndCountriesType = string[];
 
@@ -39,9 +37,9 @@ const CommentForm = () => {
     // Now you can send both the form data and the image files to the server
   };
 
-  const { mutate, reset } = useMutation({
+  const { mutate, reset, isPending } = useMutation({
     mutationFn: (newComment: commentType) =>
-      fetch("/api/comment", {
+      fetch("https://culinary-canvas-delta.vercel.app/api/comment", {
         // Using relative path to access API route
         method: "POST",
         body: JSON.stringify({
@@ -84,7 +82,9 @@ const CommentForm = () => {
         >
           <FormTextArea name="content" label="Comment" />
 
-          <Button type="submit">Submit</Button>
+          <Button disabled={isPending} type="submit">
+            {isPending ? <ReloadIcon className="animate-spin" /> : "Submit"}
+          </Button>
         </form>
       </div>
     </FormProvider>

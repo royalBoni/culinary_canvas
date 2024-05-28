@@ -68,14 +68,19 @@ const SingleRecipeChild = ({
 
   const { mutate, reset } = useMutation({
     mutationFn: (data: any) =>
-      fetch(data.action ? `/api/likes/${data.action.like_id}` : "/api/likes", {
-        // Using relative path to access API route
-        method: data.action ? "DELETE" : "POST",
-        body: JSON.stringify({
-          liker_id: data.liker_id,
-          recipe_id: data.recipe_id,
-        }),
-      }).then((res) => {
+      fetch(
+        data.action
+          ? `https://culinary-canvas-delta.vercel.app/api/likes/${data.action.like_id}`
+          : "https://culinary-canvas-delta.vercel.app/api/likes",
+        {
+          // Using relative path to access API route
+          method: data.action ? "DELETE" : "POST",
+          body: JSON.stringify({
+            liker_id: data.liker_id,
+            recipe_id: data.recipe_id,
+          }),
+        }
+      ).then((res) => {
         if (!res.ok) {
           throw new Error("Failed to like recipe");
         }

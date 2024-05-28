@@ -25,7 +25,9 @@ const ChefListCard = ({ chef }: { chef: chefType }) => {
   const { mutate, reset } = useMutation({
     mutationFn: (data: any) =>
       fetch(
-        data.action ? `/api/follow/${data.action.follow_id}` : "/api/follow",
+        data.action
+          ? `https://culinary-canvas-delta.vercel.app/api/follow/${data.action.follow_id}`
+          : "/api/follow",
         {
           // Using relative path to access API route
           method: data.action ? "DELETE" : "POST",

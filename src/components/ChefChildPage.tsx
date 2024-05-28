@@ -45,7 +45,6 @@ const ChefChildPage = ({
   };
 
   const selectOperation = (operation: string) => {
-    console.log(operation);
     openOrCloseAlertDialog(true);
     specifyOperation(operation);
   };
@@ -81,7 +80,9 @@ const ChefChildPage = ({
   const { mutate, reset } = useMutation({
     mutationFn: (data: any) =>
       fetch(
-        data.action ? `/api/follow/${data.action.follow_id}` : "/api/follow",
+        data.action
+          ? `https://culinary-canvas-delta.vercel.app/api/follow/${data.action.follow_id}`
+          : "https://culinary-canvas-delta.vercel.app/api/follow",
         {
           // Using relative path to access API route
           method: data.action ? "DELETE" : "POST",
@@ -149,10 +150,9 @@ const ChefChildPage = ({
             </div>
           </div>
 
-          {Number(user?.id) === Number(params.slug) ? (
-            <Button>
-              <UserCog onClick={() => selectOperation("edit-profile")} /> Edit
-              Profile
+          {user?.id === params.slug ? (
+            <Button onClick={() => selectOperation("edit-profile")}>
+              <UserCog /> Edit Profile
             </Button>
           ) : (
             <Button onClick={() => selectFollowOperation(chef.id)}>
@@ -176,18 +176,6 @@ const ChefChildPage = ({
           </div>
 
           <p className="text-pink-500">{chef?.bio}</p>
-
-          <div className="flex gap-5">
-            <div className="border-pink-500 border text-gray-500 font-bold p-1">
-              Facebook
-            </div>
-            <div className="border-pink-500 border text-gray-500 font-bold p-1">
-              Instagram
-            </div>
-            <div className="border-pink-500 border text-gray-500 font-bold p-1">
-              Youtube
-            </div>
-          </div>
 
           <div className="flex gap-5 border-1 border-pink-500 border w-fit rounded-3xl p-1">
             {pageActionList.map((action) => (

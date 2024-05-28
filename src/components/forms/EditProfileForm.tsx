@@ -1,6 +1,6 @@
-/* "use client";
+"use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FormTextField } from "../form-fields";
@@ -11,6 +11,7 @@ import { Select } from "../form-fields/Select";
 import { ImagePlus, X } from "lucide-react";
 import { FormTextArea } from "../form-fields/TextArea";
 import { useAlertDialogContext } from "@/app/store/alertDialogContext";
+import { ReloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 
 type CategoriesAndCountriesType = string[];
@@ -35,49 +36,80 @@ const EditProfileForm = () => {
       bio: user?.bio,
     },
   });
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files) return;
+  const [imagePreview, setImagePreview] = useState<string | null | undefined>();
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
-    const previews: string[] = [];
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
       const reader = new FileReader();
       reader.onload = () => {
         if (typeof reader.result === "string") {
-          previews.push(reader.result);
-          if (previews.length === files.length) {
-            setImagePreviews(previews);
-          }
+          setImagePreview(reader.result);
         }
       };
       reader.readAsDataURL(file);
     }
   };
 
+  useEffect(() => {
+    setImagePreview(user?.img);
+  }, []);
+
+  const deleteSelectedImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
+  };
+
   const handleIconClick = () => {
-    const fileInput = document.getElementById("profile_image_urls");
+    const fileInput = document.getElementById("images");
     if (fileInput) {
       fileInput.click(); // Programmatically trigger file input click
     }
   };
 
-  const deleteSelectImage = (image: string) => {
-    const imagesToRemove = imagePreviews.filter(
-      (searchedImage) => searchedImage !== image
-    );
-    setImagePreviews(imagesToRemove);
-  };
-
-  const onSubmitNewGift:SubmitHandler<recipeType> = (data) => {
-    console.log("this is the data");
+  const onSubmitNewGift: SubmitHandler<chefType> = (data) => {
     console.log(data);
-    // Now you can send both the form data and the image files to the server
+    const formData = new FormData();
+    formData.append("username", data.username);
+    formData.append("bio", data.bio);
+    formData.append("country", data.country);
+    if (user?.id) {
+      formData.append("user_id", user?.id);
+    }
+    if (imageFile) {
+      formData.append("image", imageFile);
+    }
+
+    mutate(formData);
   };
 
-  
+  const { mutate, reset, isPending } = useMutation({
+    mutationFn: (formData: FormData) =>
+      fetch("https://culinary-canvas-delta.vercel.app/api/chef", {
+        // Using relative path to access API route
+        method: "PATCH",
+
+        body: formData,
+      }).then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to update profile. Please check your inputs");
+        }
+        console.log("successfully updated");
+        reset();
+        return res.json();
+      }),
+    onSuccess: (data) => {
+      // Handle successful login (e.g., save user data to context, redirect, etc.)
+      console.log("Successfully updated in:", data);
+      openOrCloseAlertDialog(false);
+    },
+    onError: (error) => {
+      console.error("Mutation error:", error);
+    },
+  });
 
   return (
     <FormProvider {...methods}>
@@ -92,54 +124,49 @@ const EditProfileForm = () => {
           className="flex flex-col gap-5"
           onSubmit={methods.handleSubmit(onSubmitNewGift)}
         >
-    
-
           <>
             <div>
               <label htmlFor="images">Profile Image</label>
-
-              {imagePreviews.length === 0 && (
-                <div className="flex justify-center">
-                  <div
-                    className="bg-gray-500 w-72 h-64 rounded-xl flex flex-col justify-center items-center cursor-pointer"
-                    onClick={handleIconClick} // Call handleIconClick function when icon is clicked
-                  >
-                    Click to Add ProfileImage
-                    <ImagePlus size={50} /> 
-                  </div>
-                
-                </div>
-              )}
-            </div>
-           
-            <div className="flex gap-2 justify-center">
-              {imagePreviews.map((preview, index) => (
-                <div className="relative w-72" key={index}>
+              <div>
+                {!imagePreview && (
+                  <>
+                    <div
+                      className="bg-gray-500 w-full h-36 flex flex-col justify-center items-center cursor-pointer"
+                      onClick={handleIconClick} // Call handleIconClick function when icon is clicked
+                    >
+                      Click to Add Image
+                      <ImagePlus size={50} /> {/* Folder icon */}
+                    </div>
+                    <input
+                      className="w-fit h-fit"
+                      hidden
+                      id="images"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange} // Handle image selection
+                    />
+                  </>
+                )}
+              </div>
+              {imagePreview && (
+                <div className="relative w-72">
                   <Button className="absolute bg-pink-500 p-1 rounded-full text-white right-1 top-1 hover:bg-gray-500">
-                    <X onClick={() => deleteSelectImage(preview)} />
+                    <X onClick={deleteSelectedImage} />
                   </Button>
                   <Image
-                    key={index}
-                    src={preview}
-                    alt={`Preview ${index}`}
-                    className="w-72 h-64 rounded-xl"
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-72"
                     width={50}
                     height={50}
                   />
                 </div>
-              ))}
+              )}
             </div>
           </>
 
-          <FormTextField name="name" label="Name" type="text" />
+          <FormTextField name="username" label="Name" type="text" />
           <FormTextField name="email" label="Email" type="email" />
-
-          <FormTextField name="password" label="Password" type="password" />
-          <FormTextField
-            name="confirm-password"
-            label="Confirm Password"
-            type="password"
-          />
 
           <Select
             name="country"
@@ -149,7 +176,13 @@ const EditProfileForm = () => {
           />
           <FormTextArea name="bio" label="Bio" />
 
-          <Button type="submit">Save Changes</Button>
+          <Button disabled={isPending} type="submit">
+            {isPending ? (
+              <ReloadIcon className="animate-spin" />
+            ) : (
+              "Save Changes"
+            )}
+          </Button>
         </form>
       </div>
     </FormProvider>
@@ -157,4 +190,3 @@ const EditProfileForm = () => {
 };
 
 export default EditProfileForm;
- */

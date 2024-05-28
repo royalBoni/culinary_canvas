@@ -10,6 +10,7 @@ import { ImagePlus, X } from "lucide-react";
 import { FormTextArea } from "../form-fields/TextArea";
 import { useAlertDialogContext } from "@/app/store/alertDialogContext";
 import { UseUserContext } from "@/app/store/userContext";
+import { ReloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 
 type CategoriesAndCountriesType = string[];
@@ -82,9 +83,9 @@ const CreateRecipeForm: React.FC = () => {
     mutate(formData);
   };
 
-  const { mutate, reset } = useMutation({
+  const { mutate, reset, isPending } = useMutation({
     mutationFn: (formData: FormData) =>
-      fetch("/api/recipe", {
+      fetch("https://culinary-canvas-delta.vercel.app/api/recipe", {
         // Using relative path to access API route
         method: "POST",
         body: formData,
@@ -162,9 +163,6 @@ const CreateRecipeForm: React.FC = () => {
                       type="file"
                       accept="image/*"
                       onChange={handleImageChange} // Handle image selection
-                      /*   ref={(e) => {
-                        if (e) methods.register("image", { value: e });
-                      }} */
                     />
                   </>
                 )}
@@ -193,7 +191,13 @@ const CreateRecipeForm: React.FC = () => {
               <ImagePlus onClick={() => setAddImageSection(true)} />
             </div>
           </div>
-          <Button type="submit">Submit</Button>
+          <Button disabled={isPending} type="submit">
+            {isPending ? (
+              <ReloadIcon className="animate-spin" />
+            ) : (
+              "Create Recipe"
+            )}
+          </Button>
         </form>
       </div>
     </FormProvider>

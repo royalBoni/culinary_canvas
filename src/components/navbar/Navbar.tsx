@@ -1,14 +1,14 @@
 // src/components/navbar/Navbar.tsx
-'use client';
+"use client";
 import React from "react";
 import Image from "next/image";
 import Links from "./links/Links";
 import Link from "next/link";
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
   const pathname = usePathname();
-  const isHomePage = pathname === '/';
+  const isHomePage = pathname === "/";
 
   if (isHomePage) {
     return null;

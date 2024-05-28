@@ -16,11 +16,15 @@ export type dataContextType = {
   likes: likeType[];
   comments: commentType[];
   follows: followType[];
+  recipeLoading: boolean;
+  chefLoading: boolean;
   addChefs: (chefs: chefType[]) => void;
   addRecipes: (recipes: recipeType[]) => void;
   addLikes: (likes: likeType[]) => void;
   addComments: (comments: commentType[]) => void;
   addFollows: (follows: followType[]) => void;
+  addRecipyLoadingState: (recipeLoading: boolean) => void;
+  addChefLoadingState: (chefLoading: boolean) => void;
 };
 
 const DataContext = createContext<dataContextType | undefined>(undefined);
@@ -41,9 +45,19 @@ export const DataProvider = ({ children }: { children: any }) => {
   const [likes, setLikes] = useState<likeType[]>([]);
   const [comments, setComments] = useState<commentType[]>([]);
   const [follows, setFollows] = useState<followType[]>([]);
+  const [recipeLoading, setRecipeLoading] = useState<boolean>(false);
+  const [chefLoading, setChefLoading] = useState<boolean>(false);
 
   const addRecipes = (newRecipes: recipeType[]) => {
     setRecipes(newRecipes);
+  };
+
+  const addRecipyLoadingState = (newState: boolean) => {
+    setRecipeLoading(newState);
+  };
+
+  const addChefLoadingState = (newState: boolean) => {
+    setChefLoading(newState);
   };
 
   const addChefs = (newChefs: chefType[]) => {
@@ -70,11 +84,15 @@ export const DataProvider = ({ children }: { children: any }) => {
         recipes,
         comments,
         follows,
+        recipeLoading,
+        chefLoading,
         addChefs,
         addRecipes,
         addLikes,
         addComments,
         addFollows,
+        addRecipyLoadingState,
+        addChefLoadingState,
       }}
     >
       {children}

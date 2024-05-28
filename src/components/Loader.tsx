@@ -1,7 +1,7 @@
 import React from "react";
 
-const Loading = () => (
-  <div className=" w-100 flex text-4xl items-center min-h-screen w-full justify-center text text-pink-500 radial">
+const Loader = () => (
+  <div className=" w-100 flex text-4xl items-center h-full w-full justify-center text text-pink-500">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="75"
@@ -19,4 +19,4 @@ const Loading = () => (
   </div>
 );
 
-export default Loading;
+export default Loader;

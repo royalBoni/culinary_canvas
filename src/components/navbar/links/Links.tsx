@@ -20,7 +20,6 @@ export type linkType = {
 const links: linkType[] = [
   { title: "Recipies", path: "/recipies" },
   { title: "Chefs", path: "/chefs" },
-  { title: "Blog", path: "/blog" },
 ];
 
 const Links = () => {

@@ -1,11 +1,8 @@
 "use client";
 import React from "react";
-import { getChef, getRecipe } from "@/lib/actions";
 import { recipeType, chefType, commentType } from "@/app/schema/recipe";
-import { getProductComments } from "@/lib/actions";
 import { useDataContext } from "@/app/store/data-context";
 import SingleRecipeChild from "@/components/SingleRecipeChild";
-import { useQuery } from "@tanstack/react-query";
 import "./styles.css";
 
 export type SlugType = {
@@ -20,14 +17,6 @@ const SingleRecipe = ({ params }: { params: SlugType }) => {
     const findRecipe = recipes?.find((recipe) => recipe.id === id);
 
     return findRecipe as recipeType;
-  };
-
-  const getProductComments = (id: number | string) => {
-    const findComments = comments?.filter(
-      (comment) => Number(comment.recipe_id) === Number(id)
-    );
-
-    return findComments;
   };
 
   const returnChef = (id: number | string) => {

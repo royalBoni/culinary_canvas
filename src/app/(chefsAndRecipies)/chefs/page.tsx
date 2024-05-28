@@ -1,22 +1,28 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 import ChefListCard from "@/components/ChefListCard";
 import { useDataContext } from "@/app/store/data-context";
+import Loader from "@/components/Loader";
 
 const ChefsPage = () => {
-  const { chefs, recipes } = useDataContext();
+  const { chefs, chefLoading } = useDataContext();
 
   return (
-    <section className="flex flex-col gap-10 w-4/4 text-white font-bold lg:w-3/4">
+    <section className="flex flex-col p-2 gap-10 w-full text-white font-bold">
       <p>
         You have <span className="text-black">{chefs?.length}</span> to explore
       </p>
-
-      <div className="grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid gap-5 px-5">
-        {chefs?.map((chef) => (
-          <ChefListCard chef={chef} key={chef?.id} />
-        ))}
-      </div>
+      {chefLoading ? (
+        <Loader />
+      ) : (
+        <div className="grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 grid gap-5">
+          {chefs?.map((chef) => (
+            <Suspense key={chef?.id}>
+              <ChefListCard chef={chef} key={chef?.id} />
+            </Suspense>
+          ))}
+        </div>
+      )}
     </section>
   );
 };

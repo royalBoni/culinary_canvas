@@ -38,8 +38,8 @@ const CommentCard = ({ comment }: { comment: commentType }) => {
         <div className="flex gap-6">
           <Image
             src={
-              returnChef(comment?.user_id).img
-                ? `${returnChef(comment?.user_id).img}`
+              returnChef(comment?.user_id)?.img
+                ? `${returnChef(comment?.user_id)?.img}`
                 : "/noavatar.png"
             }
             alt=""

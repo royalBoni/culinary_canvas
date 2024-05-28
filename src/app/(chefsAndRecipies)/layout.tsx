@@ -2,7 +2,6 @@
 //import type { Metadata } from "next";
 
 import { type PropsWithChildren } from "react";
-import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
 import ChefRecipesSidebar from "@/components/ChefRecipesSidebar";
@@ -17,8 +16,15 @@ import { useDataContext } from "../store/data-context";
 
 const Layout = ({ children }: PropsWithChildren) => {
   const pathName = usePathname();
-  const { addChefs, addRecipes, addLikes, addComments, addFollows } =
-    useDataContext();
+  const {
+    addChefs,
+    addRecipes,
+    addLikes,
+    addComments,
+    addFollows,
+    addRecipyLoadingState,
+    addChefLoadingState,
+  } = useDataContext();
 
   const {
     data: recipeData,
@@ -27,9 +33,9 @@ const Layout = ({ children }: PropsWithChildren) => {
   } = useQuery({
     queryKey: ["recipeposts"],
     queryFn: () =>
-      fetch("https://culinary-canvas-delta.vercel.app/api/recipe", {
-        cache: "no-store",
-      }).then((res) => res.json()),
+      fetch("http://localhost:3000/api/recipe", { cache: "no-store" }).then(
+        (res) => res.json()
+      ),
     refetchInterval: 4000,
     retry: 5,
   });
@@ -41,9 +47,7 @@ const Layout = ({ children }: PropsWithChildren) => {
   } = useQuery({
     queryKey: ["chefposts"],
     queryFn: () =>
-      fetch("https://culinary-canvas-delta.vercel.app/api/chef").then((res) =>
-        res.json()
-      ),
+      fetch("http://localhost:3000/api/chef").then((res) => res.json()),
     refetchInterval: 4000,
     retry: 5,
   });
@@ -55,9 +59,7 @@ const Layout = ({ children }: PropsWithChildren) => {
   } = useQuery({
     queryKey: ["likesposts"],
     queryFn: () =>
-      fetch("https://culinary-canvas-delta.vercel.app/api/likes").then((res) =>
-        res.json()
-      ),
+      fetch("http://localhost:3000/api/likes").then((res) => res.json()),
     refetchInterval: 4000,
     retry: 5,
   });
@@ -69,9 +71,7 @@ const Layout = ({ children }: PropsWithChildren) => {
   } = useQuery({
     queryKey: ["commentposts"],
     queryFn: () =>
-      fetch("https://culinary-canvas-delta.vercel.app/api/comment").then(
-        (res) => res.json()
-      ),
+      fetch("http://localhost:3000/api/comment").then((res) => res.json()),
     refetchInterval: 4000,
     retry: 5,
   });
@@ -83,9 +83,7 @@ const Layout = ({ children }: PropsWithChildren) => {
   } = useQuery({
     queryKey: ["followposts"],
     queryFn: () =>
-      fetch("https://culinary-canvas-delta.vercel.app/api/follow").then((res) =>
-        res.json()
-      ),
+      fetch("http://localhost:3000/api/follow").then((res) => res.json()),
     refetchInterval: 4000,
     retry: 5,
   });
@@ -95,11 +93,13 @@ const Layout = ({ children }: PropsWithChildren) => {
   addLikes(likesData);
   addComments(commentData);
   addFollows(followData);
+  addRecipyLoadingState(recipeIsLoading);
+  addChefLoadingState(chefIsLoading);
 
   return (
     <>
       {" "}
-      <div className="flex flex-col gap-10 radial min-h-screen py-2.5 md:p-14 ">
+      <div className="flex flex-col gap-10 radial min-h-screen py-2.5 xl:p-14 ">
         {pathName === "/recipies" && <ChefRecipesFilterNav />}
 
         <div className="flex gap-20 justify-center">

@@ -125,7 +125,7 @@ const ChefChildPage = ({
   };
 
   return (
-    <div className="h-auto flex flex-col w-4/4 lg:w-3/4">
+    <div className="h-auto flex flex-col p-2 w-full">
       <div className="bg-[url('/noavatar.png')] backgroungImage max-w-full relative min-h-80">
         <Image
           src={

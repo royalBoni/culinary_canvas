@@ -124,37 +124,23 @@ const SingleRecipeChild = ({
   };
 
   return (
-    <div className="h-auto relative lg:w-3/4 w-full">
-      <div className="w-5/5 grid gap-10 h-auto lg:heights lg:flex">
-        <div className="w-5/5 heights flex flex-col-reverse gap-5 lg:w-3/5 lg:flex-row">
-          <div className="flex flex-row gap-2 heights overflow-y-auto bg-black w-3/3 lg:w-1/3 lg:flex-col ">
-            {recipeImage.map((image) => (
-              <Image
-                key={image}
-                src={image}
-                alt=""
-                width={400}
-                height={400}
-                className="object-cover p-3 rounded-3xl w-40 h-40 lg:w-64 lg:h-64"
-                onClick={() => returnClickedImage(image)}
-              />
-            ))}
-          </div>
-          <div className="bg-black w-3/3 flex items-center justify-center lg:w-2/3">
-            <Image
-              src={
-                recipe?.img && recipe?.img !== null
-                  ? `${recipe?.img}`
-                  : "/noavatar.png"
-              }
-              alt=""
-              width={400}
-              height={400}
-              className="object-cover w-5/5 h-5/5 lg:h-4/5  lg:w-4/5"
-            />
-          </div>
+    <div className="h-auto relative xl:w-4/4 w-full p-2">
+      <div className="w-5/5 grid gap-10 h-auto xl:heights xl:flex">
+        <div className="bg-black w-4/4 flex items-center heights justify-center xl:w-2/4">
+          <Image
+            src={
+              recipe?.img && recipe?.img !== null
+                ? `${recipe?.img}`
+                : "/noavatar.png"
+            }
+            alt=""
+            width={400}
+            height={400}
+            className="object-cover w-5/5 h-5/5 xl:h-4/5  xl:w-4/5"
+          />
         </div>
-        <div className="w-5/5 bg-black flex flex-col gap-5 p-5 info lg:h-auto lg:w-2/5 heights overflow-y-auto">
+
+        <div className="w-5/5 bg-black flex flex-col gap-5 p-5 info xl:h-auto xl:w-2/4 heights overflow-y-auto">
           <h1 className="text-pink-500 font-bold text-3xl">{recipe?.name}</h1>
           <div>
             <h1 className="text-pink-500 font-bold">INGREDIENTS:</h1>

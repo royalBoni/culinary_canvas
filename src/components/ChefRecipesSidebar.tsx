@@ -11,7 +11,7 @@ const ChefRecipesSidebar = () => {
   const pathName = usePathname();
 
   return (
-    <section className="flex-col w-1/4 min-w-[290px] lg:flex gap-10 sticky top-5 h-screen overflow-hidden hidden">
+    <section className="flex-col w-1/4 min-w-[290px] 2xl:flex gap-10 sticky top-5 h-screen overflow-hidden hidden">
       <div className="p-5 rounded-lg text-white bg-black flex flex-col gap-3">
         <h2 className="font-bold text-pink-500 text-xl">Most Popular Chefs</h2>
         <div className="flex flex-col gap-4 overflow-y-auto max-h-[220px]">

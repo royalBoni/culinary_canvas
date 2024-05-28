@@ -27,9 +27,9 @@ const Layout = ({ children }: PropsWithChildren) => {
   } = useQuery({
     queryKey: ["recipeposts"],
     queryFn: () =>
-      fetch("http://localhost:3000/api/recipe", { cache: "no-store" }).then(
-        (res) => res.json()
-      ),
+      fetch("https://culinary-canvas-delta.vercel.app/api/recipe", {
+        cache: "no-store",
+      }).then((res) => res.json()),
     refetchInterval: 4000,
     retry: 5,
   });
@@ -41,7 +41,9 @@ const Layout = ({ children }: PropsWithChildren) => {
   } = useQuery({
     queryKey: ["chefposts"],
     queryFn: () =>
-      fetch("http://localhost:3000/api/chef").then((res) => res.json()),
+      fetch("https://culinary-canvas-delta.vercel.app/api/chef").then((res) =>
+        res.json()
+      ),
     refetchInterval: 4000,
     retry: 5,
   });
@@ -53,7 +55,9 @@ const Layout = ({ children }: PropsWithChildren) => {
   } = useQuery({
     queryKey: ["likesposts"],
     queryFn: () =>
-      fetch("http://localhost:3000/api/likes").then((res) => res.json()),
+      fetch("https://culinary-canvas-delta.vercel.app/api/likes").then((res) =>
+        res.json()
+      ),
     refetchInterval: 4000,
     retry: 5,
   });
@@ -65,7 +69,9 @@ const Layout = ({ children }: PropsWithChildren) => {
   } = useQuery({
     queryKey: ["commentposts"],
     queryFn: () =>
-      fetch("http://localhost:3000/api/comment").then((res) => res.json()),
+      fetch("https://culinary-canvas-delta.vercel.app/api/comment").then(
+        (res) => res.json()
+      ),
     refetchInterval: 4000,
     retry: 5,
   });
@@ -77,7 +83,9 @@ const Layout = ({ children }: PropsWithChildren) => {
   } = useQuery({
     queryKey: ["followposts"],
     queryFn: () =>
-      fetch("http://localhost:3000/api/follow").then((res) => res.json()),
+      fetch("https://culinary-canvas-delta.vercel.app/api/follow").then((res) =>
+        res.json()
+      ),
     refetchInterval: 4000,
     retry: 5,
   });

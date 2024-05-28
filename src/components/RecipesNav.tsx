@@ -30,14 +30,14 @@ const NavigationMenuDemo = () => {
     <NavigationMenu.Root>
       <NavigationMenu.List className="gap-5 bg-black rounded-full p-3 text-white lg:flex hidden">
         {recipyHeaderItems.map((recipyHeaderItem) => (
-          <NavigationMenu.Item>
+          <NavigationMenu.Item key={recipyHeaderItem.name}>
             <NavigationMenu.Trigger className="p-2 font-bold">
               {recipyHeaderItem.name}
             </NavigationMenu.Trigger>
             {recipyHeaderItem.items.length > 1 && (
               <NavigationMenu.Content className="NavigationMenuContent bg-black flex gap-5 p-5 rounded-lg">
                 {recipyHeaderItem.items.map((item) => (
-                  <ListItem title={item}></ListItem>
+                  <ListItem title={item} key={item}></ListItem>
                 ))}
               </NavigationMenu.Content>
             )}
@@ -77,5 +77,8 @@ const ListItem = React.forwardRef(
     </li>
   )
 );
+
+// Set the display name for the component
+ListItem.displayName = "ListItem";
 
 export default NavigationMenuDemo;

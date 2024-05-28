@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useDataContext } from "@/app/store/data-context";
 
 const ChefRecipiesSideBar = () => {
-  const { chefs, recipies } = useDataContext();
+  const { chefs, recipes } = useDataContext();
 
   const pathName = usePathname();
 
@@ -27,7 +27,7 @@ const ChefRecipiesSideBar = () => {
       >
         <h2 className="font-bold text-pink-500 text-xl">Trending Recipies</h2>
         <div className="flex flex-col gap-4">
-          {recipies?.map((recipe) => (
+          {recipes?.map((recipe) => (
             <PopularRecipeCard recipe={recipe} key={recipe.name} />
           ))}
         </div>

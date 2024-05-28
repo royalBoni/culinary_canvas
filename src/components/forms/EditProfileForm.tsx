@@ -1,10 +1,10 @@
-"use client";
+/* "use client";
 
 import React, { useState, useEffect } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FormTextField } from "../form-fields";
-import { recipeType } from "@/app/schema/recipe";
+import { chefType, recipeType } from "@/app/schema/recipe";
 import { UseUserContext } from "@/app/store/userContext";
 import { Button } from "../Button";
 import { Select } from "../form-fields/Select";
@@ -27,9 +27,9 @@ const EditProfileForm = () => {
   const { user } = UseUserContext();
   const { openOrCloseAlertDialog } = useAlertDialogContext();
 
-  const methods = useForm({
+  const methods = useForm<chefType>({
     defaultValues: {
-      name: user?.username,
+      username: user?.username,
       email: user?.email,
       country: user?.country,
       bio: user?.bio,
@@ -71,21 +71,13 @@ const EditProfileForm = () => {
     setImagePreviews(imagesToRemove);
   };
 
-  const onSubmitNewGift = (data: recipeType) => {
+  const onSubmitNewGift:SubmitHandler<recipeType> = (data) => {
     console.log("this is the data");
     console.log(data);
     // Now you can send both the form data and the image files to the server
   };
 
-  /* {
-    id: 5,
-    username: "chef_antonio",
-    email: "antonio@example.com",
-    password_hash: "hashed_password_5",
-    profile_image_url: "https://example.com/chef_antonio.jpg",
-    bio: "Master of Mediterranean cuisine, bringing the flavors of Greece and Spain to your kitchen.",
-    country: "Spain",
-  }, */
+  
 
   return (
     <FormProvider {...methods}>
@@ -100,7 +92,7 @@ const EditProfileForm = () => {
           className="flex flex-col gap-5"
           onSubmit={methods.handleSubmit(onSubmitNewGift)}
         >
-          {/* Input field for uploading images */}
+    
 
           <>
             <div>
@@ -113,28 +105,16 @@ const EditProfileForm = () => {
                     onClick={handleIconClick} // Call handleIconClick function when icon is clicked
                   >
                     Click to Add ProfileImage
-                    <ImagePlus size={50} /> {/* Folder icon */}
+                    <ImagePlus size={50} /> 
                   </div>
-                  <input
-                    className="w-fit h-fit"
-                    hidden
-                    name="profile_image_urls"
-                    id="profile_image_urls"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange} // Handle image selection
-                    ref={(e) => {
-                      if (e)
-                        methods.register("profile_image_urls", { value: e });
-                    }}
-                  />
+                
                 </div>
               )}
             </div>
-            {/* Display image previews */}
+           
             <div className="flex gap-2 justify-center">
               {imagePreviews.map((preview, index) => (
-                <div className="relative w-72">
+                <div className="relative w-72" key={index}>
                   <Button className="absolute bg-pink-500 p-1 rounded-full text-white right-1 top-1 hover:bg-gray-500">
                     <X onClick={() => deleteSelectImage(preview)} />
                   </Button>
@@ -177,3 +157,4 @@ const EditProfileForm = () => {
 };
 
 export default EditProfileForm;
+ */

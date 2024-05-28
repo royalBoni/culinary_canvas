@@ -11,3 +11,6 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     />
   )
 );
+
+// Set the display name for the component
+TextInput.displayName = "TextInput";

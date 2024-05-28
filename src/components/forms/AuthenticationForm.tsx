@@ -29,7 +29,8 @@ export type CheftLoginOrSignUpType = {
 };
 
 const FormComponent = () => {
-  const methods = useForm({});
+  //const methods = useForm({});
+  const methods = useForm<CheftLoginOrSignUpType>();
 
   const { loggedInUser } = UseUserContext();
   const { openOrCloseAlertDialog } = useAlertDialogContext();
@@ -58,7 +59,7 @@ const FormComponent = () => {
               ? {
                   username: newPost.name,
                   email: newPost.email,
-                  password_hash: newPost.password,
+                  password: newPost.password,
                 }
               : {
                   email: newPost.email,
@@ -90,7 +91,10 @@ const FormComponent = () => {
     },
   });
 
-  const onSubmit = (data: CheftLoginOrSignUpType) => {
+  /* const onSubmit = (data: CheftLoginOrSignUpType) => {
+    mutate(data);
+  }; */
+  const onSubmit: SubmitHandler<CheftLoginOrSignUpType> = (data) => {
     mutate(data);
   };
 
@@ -135,7 +139,7 @@ const FormComponent = () => {
           </p>
         ) : (
           <p>
-            You don't have an account?
+            You dont have an account?
             <span
               className="text-gray-500 hover:text-white"
               onClick={() => setFormOperationState("sign-up")}
@@ -147,7 +151,6 @@ const FormComponent = () => {
 
         <div className="flex gap-5">
           <Button className="hover:bg-gray-600 cursor-pointer bg-gray-500 p-3 text-white items-center rounded-xl flex gap-3">
-            {" "}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 text-blue-800"
@@ -157,7 +160,7 @@ const FormComponent = () => {
               <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
             </svg>
             Facebook
-          </Button>{" "}
+          </Button>
           <Button className="hover:bg-gray-600 cursor-pointer bg-gray-500 p-3 text-white items-center rounded-xl flex gap-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -172,9 +175,8 @@ const FormComponent = () => {
               />
             </svg>
             Google
-          </Button>{" "}
+          </Button>
           <Button className="hover:bg-gray-600 cursor-pointer bg-gray-500 p-3 text-white items-center rounded-xl flex gap-3">
-            {" "}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 text-black"

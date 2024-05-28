@@ -1,7 +1,6 @@
 "use client";
-
 import React, { useState, ChangeEvent } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, SubmitHandler } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import { FormTextField } from "../form-fields";
 import { recipeType } from "@/app/schema/recipe";
@@ -33,7 +32,7 @@ const allCountriesOfOrigin: CategoriesAndCountriesType = [
 const CreateRecipeForm: React.FC = () => {
   const { user } = UseUserContext();
   const { openOrCloseAlertDialog } = useAlertDialogContext();
-  const methods = useForm();
+  const methods = useForm<recipeType>();
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [addImageSection, setAddImageSection] = useState<boolean>(false);
@@ -64,7 +63,7 @@ const CreateRecipeForm: React.FC = () => {
     setImagePreview(null);
   };
 
-  const onSubmitNewGift = (data: recipeType) => {
+  const onSubmitNewGift: SubmitHandler<recipeType> = (data: recipeType) => {
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("calories", data.calories.toString());
@@ -85,7 +84,8 @@ const CreateRecipeForm: React.FC = () => {
 
   const { mutate, reset } = useMutation({
     mutationFn: (formData: FormData) =>
-      fetch("http://localhost:3000/api/recipe/", {
+      fetch("/api/recipe", {
+        // Using relative path to access API route
         method: "POST",
         body: formData,
       }).then((res) => {
@@ -132,7 +132,7 @@ const CreateRecipeForm: React.FC = () => {
           />
           <Select name="category" label="Category" options={allCategories} />
           <Select
-            name="country"
+            name="countryOfOrigin"
             label="Country of Origin"
             options={allCountriesOfOrigin}
           />
@@ -162,9 +162,9 @@ const CreateRecipeForm: React.FC = () => {
                       type="file"
                       accept="image/*"
                       onChange={handleImageChange} // Handle image selection
-                      ref={(e) => {
+                      /*   ref={(e) => {
                         if (e) methods.register("image", { value: e });
-                      }}
+                      }} */
                     />
                   </>
                 )}

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, SubmitHandler } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { FormTextField } from "../form-fields";
 import { commentType, recipeType } from "@/app/schema/recipe";
@@ -28,11 +28,11 @@ const CommentForm = () => {
   const { user } = UseUserContext();
   const { openOrCloseAlertDialog } = useAlertDialogContext();
 
-  const methods = useForm();
+  const methods = useForm<commentType>();
 
   const { selrecipe } = UseRecipeContext();
 
-  const onSubmitNewGift = (data: commentType) => {
+  const onSubmitNewGift: SubmitHandler<commentType> = (data) => {
     console.log(`${user?.username} is making this comment`);
     console.log(data);
     mutate(data);

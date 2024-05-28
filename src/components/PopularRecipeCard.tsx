@@ -32,8 +32,8 @@ const PopularRecipeCard = ({ recipe }: { recipe: recipeType }) => {
           {" "}
           <Image
             src={
-              recipe?.recipe_image_url && recipe?.recipe_image_url !== "NAN"
-                ? `${recipe.recipe_image_url}`
+              (recipe?.img && recipe?.img !== null) || recipe?.img !== undefined
+                ? `${recipe?.img}`
                 : "/noavatar.png"
             }
             alt=""

@@ -21,14 +21,14 @@ export const getRecipe = async (id: number) => {
   /* return findRecipe as recipeType; */
 };
 
-export const getAllChefs = () => {
-  return chefs as chefType[];
-};
+/* export const getAllChefs = () => {
+  return chefs ;
+}; */
 
 export const getChef = (id: number) => {
   const findChef = chefs.find((chef) => chef.id === Number(id));
 
-  return findChef as chefType;
+  return findChef;
 };
 
 export const getProductComments = async (id: number) => {

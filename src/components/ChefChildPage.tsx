@@ -52,14 +52,14 @@ const ChefChildPage = ({
 
   const returnChefFollowers = (user_id: number | string) => {
     const chefFollowers = follows?.filter(
-      (follow) => Number(follow?.chef_id) === Number(user_id)
+      (follow) => follow?.chef_id === user_id
     );
     return chefFollowers;
   };
 
   const returnChefFollowing = (user_id: number | string) => {
     const chefFollowing = follows?.filter(
-      (follow) => Number(follow?.fan_id) === Number(user_id)
+      (follow) => follow?.fan_id === user_id
     );
     return chefFollowing;
   };
@@ -69,9 +69,7 @@ const ChefChildPage = ({
     chef_id: number | string
   ) => {
     const chefFollowing = follows.find(
-      (follow) =>
-        Number(follow.fan_id) === Number(Number(user_id)) &&
-        Number(follow.chef_id) === Number(chef_id)
+      (follow) => follow.fan_id === user_id && follow.chef_id === chef_id
     );
     if (chefFollowing) {
       return chefFollowing;

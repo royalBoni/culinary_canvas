@@ -6,7 +6,7 @@ import FormComponent from "./forms/AuthenticationForm";
 import "../app/(chefsAndRecipies)/recipies/[slug]/styles.css";
 import CreateRecipeForm from "./forms/CreateRecipeForm";
 import { UseOperationContext } from "@/app/store/operationsContext";
-import EditProfileForm from "./forms/EditProfileForm";
+///import EditProfileForm from "./forms/EditProfileForm";
 import CommentForm from "./forms/CommentForm";
 
 const AlertDialogComponent = () => {
@@ -24,7 +24,8 @@ const AlertDialogComponent = () => {
             {operation === "create-recipe" ? (
               <CreateRecipeForm />
             ) : operation === "edit-profile" ? (
-              <EditProfileForm />
+              //<EditProfileForm />
+              <p>edit incoming</p>
             ) : operation === "comment" ? (
               <CommentForm />
             ) : (

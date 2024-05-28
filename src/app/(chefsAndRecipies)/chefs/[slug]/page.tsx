@@ -7,24 +7,24 @@ import ChefChildPage from "@/components/ChefChildPage";
 import { useDataContext } from "@/app/store/data-context";
 
 type SlugType = {
-  slug: number;
+  slug: string;
 };
 
 const ChefProfilePage = ({ params }: { params: SlugType }) => {
   const { slug } = params;
   const { recipes, chefs } = useDataContext();
 
-  const getChef = (id: number) => {
-    const findChef = chefs?.find((chef) => Number(chef.id) === Number(id));
+  const getChef = (id: string) => {
+    const findChef = chefs?.find((chef) => chef.id === id);
 
     return findChef as chefType;
   };
 
   const chef = getChef(slug);
 
-  const getChefPostedCategories = (id: number) => {
+  const getChefPostedCategories = (id: string) => {
     const allCategoriesRecipies = recipes?.filter(
-      (recipe) => Number(recipe.chefId) === Number(id)
+      (recipe) => recipe.chefId === id
     );
     // Create an object to store categories and their counts for each chef
 

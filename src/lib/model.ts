@@ -139,19 +139,22 @@ const recipeSchema = new mongoose.Schema(
       type: String,
     },
     calories: {
-      type: String,
+      type: Number,
     },
 
     benefit: {
       type: String,
     },
     cookingTIme: {
-      type: String,
+      type: Number,
     },
     chefId: {
       type: String,
     },
     img: {
+      type: String,
+    },
+    secure_url: {
       type: String,
     },
     userId: {

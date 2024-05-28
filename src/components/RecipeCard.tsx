@@ -10,11 +10,6 @@ import { useAlertDialogContext } from "@/app/store/alertDialogContext";
 import { useDataContext } from "@/app/store/data-context";
 import { UseRecipeContext } from "@/app/store/selectedRecipeContext";
 import { useMutation } from "@tanstack/react-query";
-import {
-  //getChef,
-  checkRecipeLikeForUser,
-} from "@/lib/actions";
-import { object } from "zod";
 
 const RecipeCard = ({ recipe }: { recipe: recipeType }) => {
   const { user } = UseUserContext();
@@ -24,7 +19,7 @@ const RecipeCard = ({ recipe }: { recipe: recipeType }) => {
   const { selectRecipe } = UseRecipeContext();
 
   const returnChef = (id: number | string) => {
-    const findChef = chefs?.find((chef) => Number(chef.id) === Number(id));
+    const findChef = chefs?.find((chef) => chef.id === id);
     return findChef as chefType;
   };
 
@@ -48,9 +43,7 @@ const RecipeCard = ({ recipe }: { recipe: recipeType }) => {
     recipe_id: number | string
   ) => {
     const findLikedRecipe = likes.find(
-      (like) =>
-        Number(like.liker_id) === Number(user_id) &&
-        Number(recipe_id) === Number(like.recipe_id)
+      (like) => like.liker_id === user_id && recipe_id === like.recipe_id
     );
     if (findLikedRecipe) {
       return findLikedRecipe;
@@ -136,7 +129,7 @@ const RecipeCard = ({ recipe }: { recipe: recipeType }) => {
         {/* CHEF */}
         <div className="flex justify-between items-center">
           <div className=" flex items-center gap-3">
-            <img
+            <Image
               src={
                 returnChef(recipe?.chefId)?.img
                   ? `${returnChef(recipe?.chefId)?.img}`
@@ -151,7 +144,7 @@ const RecipeCard = ({ recipe }: { recipe: recipeType }) => {
               {returnChef(recipe.chefId)?.username}
             </span>
           </div>
-          <div>{recipe.countryOfOrigin.slice(0, 3).toUpperCase()}</div>
+          <div>{recipe?.countryOfOrigin?.slice(0, 3).toUpperCase()}</div>
         </div>
 
         {/* SOCIALS */}

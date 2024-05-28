@@ -1,7 +1,5 @@
 "use client";
 import React from "react";
-import { getAllChefs, getRecipies } from "@/lib/actions";
-import { recipeType, chefType } from "@/app/schema/recipe";
 import RecipeCard from "@/components/RecipeCard";
 import { useDataContext } from "@/app/store/data-context";
 import { UseUserContext } from "@/app/store/userContext";

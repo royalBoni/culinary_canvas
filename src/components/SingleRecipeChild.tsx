@@ -14,6 +14,7 @@ import { UseUserContext } from "@/app/store/userContext";
 import { useDataContext } from "@/app/store/data-context";
 import { UseOperationContext } from "@/app/store/operationsContext";
 import { useMutation } from "@tanstack/react-query";
+import { UseRecipeContext } from "@/app/store/selectedRecipeContext";
 
 import PopularChefCard from "./PopularChefCard";
 
@@ -23,11 +24,9 @@ const wait = () => new Promise((resolve) => setTimeout(resolve, 1000));
 
 const SingleRecipeChild = ({
   recipe,
-  comments,
   chef,
 }: {
   recipe: recipeType;
-  comments: commentType[];
   chef: chefType;
 }) => {
   const [imageUrl, setImageUrl] = useState<string>(recipeImage[0]);
@@ -36,16 +35,17 @@ const SingleRecipeChild = ({
     setImageUrl(url);
   }, []);
 
-  const { likes } = useDataContext();
-
   const { openOrCloseAlertDialog } = useAlertDialogContext();
   const { user } = UseUserContext();
   const { specifyOperation } = UseOperationContext();
+  const { selectRecipe } = UseRecipeContext();
+  const { likes, comments } = useDataContext();
 
-  const selectCommentOperation = () => {
+  const selectCommentOperation = (recipe: recipeType) => {
     if (user) {
       openOrCloseAlertDialog(true);
       specifyOperation("comment");
+      selectRecipe(recipe);
     } else {
       openOrCloseAlertDialog(true);
       specifyOperation("create-account");
@@ -57,9 +57,7 @@ const SingleRecipeChild = ({
     recipe_id: number | string
   ) => {
     const findLikedRecipe = likes.find(
-      (like) =>
-        Number(like.liker_id) === Number(user_id) &&
-        Number(recipe_id) === Number(like.recipe_id)
+      (like) => like.liker_id === user_id && recipe_id === like.recipe_id
     );
     if (findLikedRecipe) {
       return findLikedRecipe;
@@ -117,7 +115,6 @@ const SingleRecipeChild = ({
     );
     return findLikedRecipe?.length;
   };
-
   const returnNumberOfComments = (recipe_id: number | string) => {
     const findCommentedRecipe = comments?.filter(
       (comment) => comment.recipe_id === recipe_id
@@ -185,8 +182,7 @@ const SingleRecipeChild = ({
               {returnNumberOfLikes(recipe?.id)}
             </div>
             <div className="text-indigo-500 flex gap-2 hover:text-gray-500 hover:cursor-pointer">
-              <MessageCircleMore onClick={selectCommentOperation} />{" "}
-              {returnNumberOfComments(recipe?.id)}
+              <MessageCircleMore /> {returnNumberOfComments(recipe?.id)}
             </div>
           </div>
 
@@ -194,10 +190,10 @@ const SingleRecipeChild = ({
           <div className="flex justify-between border-t-2 py-2 border-gray-500">
             <div className="text-gray-500 flex gap-2 hover:text-white">
               <Heart
-                onClick={() => selectLikeOperation(recipe.id)}
+                onClick={() => selectLikeOperation(recipe?.id)}
                 className={`${
                   user?.id
-                    ? checkRecipeLikeForUser(user?.id, recipe.id)
+                    ? checkRecipeLikeForUser(user?.id, recipe?.id)
                       ? "fill-red-500 border-red-500"
                       : ""
                     : ""
@@ -207,7 +203,7 @@ const SingleRecipeChild = ({
             </div>
             <div
               className="text-gray-500 flex gap-2 hover:text-white"
-              onClick={selectCommentOperation}
+              onClick={() => selectCommentOperation(recipe)}
             >
               <MessageCircleMore /> Comment
             </div>

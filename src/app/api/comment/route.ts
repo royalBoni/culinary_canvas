@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { connectToDb } from "@/lib/utils";
 import { Comment } from "@/lib/model";
 import { commentType } from "@/app/schema/recipe";
-import { SlugType } from "@/app/(chefsAndRecipies)/recipies/[slug]/page";
+import { v4 as uuidv4 } from "uuid";
 
 export const GET = async (req: Request) => {
   try {
@@ -25,7 +25,7 @@ export const POST = async (req: Request) => {
 
     const { content, user_id, recipe_id } = body;
     const newComment = new Comment({
-      id: Math.floor(Math.random() * 1000) + 100,
+      id: uuidv4(),
       content,
       user_id,
       recipe_id,

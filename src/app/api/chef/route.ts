@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { connectToDb } from "@/lib/utils";
 import { Chef } from "@/lib/model";
 import { recipeType } from "@/app/schema/recipe";
+import { v4 as uuidv4 } from "uuid";
 
 export const GET = async (req: Request) => {
   try {
@@ -23,18 +24,18 @@ export const POST = async (req: Request) => {
     await connectToDb(); // Ensure the database is connected
 
     const body = await req.json(); // Extract data from the request body
-    const { username, email, password_hash } = body;
+    const { username, email, password } = body;
 
     const newChef = new Chef({
       username,
       email,
-      password_hash, // Assuming this field is for storing hashed passwords
-      id: Math.floor(Math.random() * 1000) + 1,
-      profile_image_avatar: "NAN",
+      password,
+      id: uuidv4(),
+      /*  profile_image_avatar: "NAN",
       country: "NAN",
       bio: "NAN",
       profile_image_url: "NAN",
-      _id: "NAN",
+      _id: "NAN", */
     });
 
     await newChef.save(); // Save the new chef to the database

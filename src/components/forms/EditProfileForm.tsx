@@ -113,7 +113,7 @@ const EditProfileForm = () => {
 
   return (
     <FormProvider {...methods}>
-      <div className=" overflow-y-scroll h-screen w-2/2 lg:w-1/2 lg:h-5/6 font-serif radial p-4 lg:p-14 flex flex-col gap-6">
+      <div className=" overflow-y-scroll h-screen w-full  lg:w-1/2 lg:h-5/6 font-serif radial p-2 lg:p-14 flex flex-col gap-6">
         <div className="flex justify-between items-center border-b-2 py-5 border-white">
           <h1 className="text-5xl font-bold text-white">Edit Profile</h1>
           <Button>

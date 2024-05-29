@@ -5,9 +5,9 @@ import { Button } from "@/components/Button";
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24 radial">
-      <div>
-        <video autoPlay muted loop id="myVideo">
-          <source src="bg-video.mp4" type="video/mp4" />{" "}
+      <div className="min-h-screen">
+        <video autoPlay muted loop id="myVideo" className="min-h-screen">
+          <source className="h-full" src="bg-video.mp4" type="video/mp4" />{" "}
           {/* credit to pexel for this video */}
         </video>
 

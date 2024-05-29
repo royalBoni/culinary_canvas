@@ -28,6 +28,8 @@ const allCountriesOfOrigin: CategoriesAndCountriesType = [
   "Mexico",
   "Greece",
   "Ghana",
+  "Czechia",
+  "Hungary",
 ];
 
 const CreateRecipeForm: React.FC = () => {
@@ -138,7 +140,7 @@ const CreateRecipeForm: React.FC = () => {
             options={allCountriesOfOrigin}
           />
           <FormTextArea name="description" label="Description" />
-          <FormTextArea name="ingredients" label="Active Ingredients" />
+          <FormTextArea name="activeIngredients" label="Active Ingredients" />
           <FormTextArea name="benefit" label="Benefit" />
           <FormTextArea name="preparation" label="Preparation" />
 

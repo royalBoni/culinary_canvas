@@ -41,17 +41,14 @@ const commentSchema = new mongoose.Schema(
     recipe_id: {
       type: String,
       required: true,
-      unique: true,
     },
     user_id: {
       type: String,
       required: true,
-      unique: true,
     },
     content: {
       type: String,
       required: true,
-      unique: true,
     },
   },
   { timestamps: true }

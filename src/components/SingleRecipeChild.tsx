@@ -128,6 +128,14 @@ const SingleRecipeChild = ({
     return findCommentedRecipe?.length;
   };
 
+  const returnRecipeComments = (recipe_id: number | string) => {
+    const findCommentedRecipe = comments?.filter(
+      (comment) => comment.recipe_id === recipe_id
+    );
+
+    return findCommentedRecipe;
+  };
+
   return (
     <div className="h-auto relative xl:w-4/4 w-full p-2">
       <div className="w-5/5 grid gap-10 h-auto xl:heights xl:flex">
@@ -147,16 +155,19 @@ const SingleRecipeChild = ({
 
         <div className="w-5/5 bg-black flex flex-col gap-5 p-5 info xl:h-auto xl:w-2/4 heights overflow-y-auto">
           <h1 className="text-pink-500 font-bold text-3xl">{recipe?.name}</h1>
-          <div>
-            <h1 className="text-pink-500 font-bold">INGREDIENTS:</h1>
-            <div className="flex gap-3 flex-wrap">
-              {recipe?.activeIngredients?.split(",").map((ingredient) => (
-                <div key={ingredient} className="text-white italic">
-                  {ingredient}
-                </div>
-              ))}
+          {recipe?.activeIngredients !== "undefined" && (
+            <div>
+              <h1 className="text-pink-500 font-bold">INGREDIENTS:</h1>
+              <div className="flex gap-3 flex-wrap">
+                {recipe?.activeIngredients?.split(",").map((ingredient) => (
+                  <div key={ingredient} className="text-white italic">
+                    {ingredient}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
+
           <div className="flex gap-3 text-white">
             <div className="flex gap-1">
               <Flame className="text-red-500" /> {recipe?.calories} calories
@@ -243,7 +254,7 @@ const SingleRecipeChild = ({
           <div className="flex flex-col gap-4">
             <h1 className="text-pink-500 font-bold">COMMENTS:</h1>
             <div className="flex flex-col gap-5">
-              {comments?.map((comment) => (
+              {returnRecipeComments(recipe?.id)?.map((comment) => (
                 <CommentCard comment={comment} key={comment?.id} />
               ))}
             </div>

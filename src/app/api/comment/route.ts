@@ -36,7 +36,6 @@ export const POST = async (req: Request) => {
 
     return NextResponse.json({
       message: "comment added successfully",
-      comment: newComment,
     });
   } catch (err) {
     console.error(err);

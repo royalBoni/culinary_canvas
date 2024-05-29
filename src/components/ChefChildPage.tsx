@@ -223,7 +223,7 @@ const ChefChildPage = ({
           <div className="grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid gap-5  mt-10">
             {returnChefFollowers(chef?.id).map((item) =>
               chefs.map((chefItem) => {
-                if (Number(chefItem?.id) === Number(item.fan_id)) {
+                if (chefItem?.id === item.fan_id) {
                   return <ChefListCard chef={chefItem} key={chefItem?.id} />;
                 }
               })
@@ -233,7 +233,7 @@ const ChefChildPage = ({
           <div className="grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid gap-5 mt-10">
             {returnChefFollowing(chef.id).map((item) =>
               chefs.map((chefItem) => {
-                if (Number(chefItem.id) === Number(item.chef_id)) {
+                if (chefItem.id === item.chef_id) {
                   return <ChefListCard chef={chefItem} key={chefItem.id} />;
                 }
               })

@@ -30,7 +30,7 @@ export const FormTextArea = ({
         id={name}
         cols={10}
         rows={10}
-        className="w-full outline-pink-500 rounded-lg px-3 py-1.5 shadow"
+        className="w-full outline-pink-500 rounded-lg px-3 py-1.5 shadow text-black"
       ></textarea>
     </div>
   );

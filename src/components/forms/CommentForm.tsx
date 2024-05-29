@@ -39,7 +39,7 @@ const CommentForm = () => {
 
   const { mutate, reset, isPending } = useMutation({
     mutationFn: (newComment: commentType) =>
-      fetch("http://localhost:3000/api/comment", {
+      fetch("https://culinary-canvas-delta.vercel.app/api/comment", {
         // Using relative path to access API route
         method: "POST",
         body: JSON.stringify({
